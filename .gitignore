@@ -1,0 +1,7 @@
+_site
+_cache
+dist
+.cabal-sandbox
+*.swp
+cabal.sandbox.config
+deploy

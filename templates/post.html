@@ -1,0 +1,20 @@
+<div class="post">
+  $partial("templates/post-header.html")$
+
+  $body$
+
+</div>
+
+<ul class="pager">
+  $if(previousPage)$
+  <li class="previous"><a href="$previousPage$">&larr; Newer</a></li>
+  $else$
+  <li class="previous disabled"><a>&larr; Newer</a></li>
+  $endif$
+
+  $if(nextPage)$
+  <li class="next"><a href="$nextPage$">Older &rarr;</a></li>
+  $else$
+  <li class="next disabled"><a>Older &rarr;</a></li>
+  $endif$
+</ul>

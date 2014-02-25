@@ -1,0 +1,23 @@
+<div class="text-center">
+  <ul class="pagination">
+    $if(previousPage)$
+    <li><a href="$previousPage$">&laquo;</a></li>
+    $else$
+    <li class="disabled"><a>&laquo;</a></li>
+    $endif$
+
+    $for(paginate)$
+    $if(active)$
+    <li class="active"><a>$body$</a></li>
+    $else$
+    <li><a href="$url$">$body$</a></li>
+    $endif$
+    $endfor$
+
+    $if(nextPage)$
+    <li><a href="$nextPage$">&raquo;</a></li>
+    $else$
+    <li class="disabled"><a>&raquo;</a></li>
+    $endif$
+  </ul>
+</div>

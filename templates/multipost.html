@@ -1,0 +1,13 @@
+<div class="posts">
+  $for(posts)$
+  <div class="post">
+    $partial("templates/post-header.html")$
+
+    $body$
+
+  </div>
+  $endfor$
+
+</div>
+
+$partial("templates/paginate.html")$
