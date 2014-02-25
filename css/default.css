@@ -22,3 +22,7 @@ footer {
 .page-header a {
   color: black;
 }
+
+.post-body {
+  line-height: 160%;
+}

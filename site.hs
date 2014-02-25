@@ -22,6 +22,15 @@ postsPattern = "posts/**/post.*"
 dateFormat :: String
 dateFormat = "%Y-%m-%d"
 
+feedConfig :: FeedConfiguration
+feedConfig = FeedConfiguration
+    { feedTitle       = "About:Blank"
+    , feedDescription = ""
+    , feedAuthorName  = "philopon"
+    , feedAuthorEmail = ""
+    , feedRoot        = "http://philopon.github.io/"
+    }
+
 main :: IO ()
 main = hakyll $ do
     match "images/*" $ do
@@ -42,7 +51,7 @@ main = hakyll $ do
         route idRoute
         compile copyFileCompiler
 
-    tags <- buildTags postsPattern $ \tag -> fromFilePath $ "tags" </> tag </> "1.html"
+    tags <- sortTagsBy tagOrder <$> buildTags postsPattern (\tag -> fromFilePath $ "tags" </> tag </> "1.html")
 
     singlePages <- createPaginate postsPattern
 
@@ -59,7 +68,7 @@ main = hakyll $ do
 
     let postCxt = postContext tags singlePages
 
-    paginateRules singlePages $ \pn pat -> do
+    paginateRules singlePages $ \_ _ -> do
         route   $ customRoute ((<.> "html"). takeDirectory . toFilePath)
         compile $ do 
             postList <- loadAll (postsPattern .&&. hasVersion "post list") :: Compiler [Item String]
@@ -116,6 +125,25 @@ main = hakyll $ do
                     >>= loadAndApplyTemplate "templates/multipost.html" tagsCxt
                     >>= loadAndApplyTemplate "templates/default.html"   tagsCxt
 
+    create ["atom.xml"] $ do
+        route idRoute
+        compile $ do
+            let feedCxt = bodyField "description" <> (postCxt [])
+            posts <- loadAllSnapshots (postsPattern .&&. hasNoVersion) "raw_post"
+            renderAtom feedConfig feedCxt posts
+    
+    create ["rss.xml"] $ do
+        route idRoute
+        compile $ do
+            let feedCxt = bodyField "description" <> (postCxt [])
+            posts <- loadAllSnapshots (postsPattern .&&. hasNoVersion) "raw_post"
+            renderRss feedConfig feedCxt posts
+
+tagOrder :: (String, [Identifier]) -> (String, [Identifier]) -> Ordering
+tagOrder a@(_,ai) b@(_,bi) = case length bi `compare` length ai of
+    EQ -> caseInsensitiveTags a b
+    o  -> o
+
 nPages :: Paginate -> Int
 nPages = M.size . paginatePages
 
@@ -124,7 +152,7 @@ globalContext tags pl =
     listField "postList" defaultContext (take recentCount <$> recentFirst pl) <>
     field "taglist" (const $ renderTags tagFunc concat tags) <>
     defaultContext
-  where tagFunc tag url n minn maxn = TS.renderTags 
+  where tagFunc tag url n _ _ = TS.renderTags 
             [ TS.TagOpen "li" []
             , TS.TagOpen "a" [("href", url)] 
             , TS.TagText $ tag ++ " "
