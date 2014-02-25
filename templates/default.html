@@ -26,22 +26,31 @@
         <div class="col-sm-9 col-md-8">
           $body$
         </div>
-        <div class="col-sm-3 col-md-4">
-          <h4>About</h4>
-          <p>Haskellとか好きですけどできません</p>
-          <p><a href="https://twitter.com/philomel202">@philomel202</a></p>
-          <p><a href="https://github.com/philopon">github</a></p>
+        <div id="side-menu" class="col-sm-3 col-md-4">
 
-          <h4>Recents</h4>
-          <ul class="list-unstyled">
-            $for(postList)$
-            $body$
-            $endfor$
-          </ul>
-          <h4>Tags</h4>
-          <ul class="list-unstyled">
-            $taglist$
-          </ul>
+          <div class="blob">
+            <h4>About</h4>
+            <p>Haskellとか好きですけどできません</p>
+            <div><a href="https://twitter.com/philomel202">@philomel202</a></div>
+            <div><a href="https://github.com/philopon">github</a></div>
+
+          </div>
+
+          <div class="blob">
+            <h4>Recents</h4>
+            <ul class="list-unstyled">
+              $for(postList)$
+              $body$
+              $endfor$
+            </ul>
+          </div>
+
+          <div class="blob">
+            <h4>Tags</h4>
+            <ul class="list-unstyled">
+              $taglist$
+            </ul>
+          </div>
         </div>
       </div>
     </div>

@@ -26,3 +26,11 @@ footer {
 .post-body {
   line-height: 160%;
 }
+
+#side-menu .blob:first-child {
+  margin-top: 60px;
+}
+
+#side-menu .blob {
+  margin-bottom: 30px;
+}
