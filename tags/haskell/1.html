@@ -8,6 +8,8 @@
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="/css/default.css" />
         <link rel="stylesheet" type="text/css" href="/css/highlight.css" />
+        <link rel="alternate" type="application/atom+xml" href="/atom.xml" />
+        <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
     </head>
     <body>
 
@@ -26,6 +28,52 @@
   
   <div class="post">
     <div class="page-header">
+  <h1><a href="/posts/2014/runsanbbox.html">runsandbox作った</a></h1>
+  <div class="clearfix">
+    <div class="pull-left"><a href="/tags/haskell/1.html">haskell</a>, <a href="/tags/cabal/1.html">cabal</a></div>
+    <div class="pull-right">Posted on 2014-02-26</div>
+  </div>
+</div>
+
+
+    <div class="post-body">
+      <p><code>cabal sandbox</code>使ってますか？私は使ってませんでした。</p>
+<p>プロジェクト毎にコンパイルするの、特にyesodとかの巨大パッケージだと死ねます。まぁそれは最初の一回だけなので我慢しましょう。ぐっと我慢して使い始めてさあ実行してみよう、と<code>cabal run</code>すると……</p>
+<pre class="sh"><code>$ time cabal run clean
+Package has never been configured. Configuring with default flags. If this
+fails, please run configure manually.
+Resolving dependencies...
+Configuring githubio-0.1.0.0...
+Preprocessing executable 'githubio' for githubio-0.1.0.0...
+[1 of 1] Compiling Main             ( site.hs, dist/build/githubio/githubio-tmp/Main.o )
+Linking dist/build/githubio/githubio ...
+Removing _site...
+Removing _cache...
+Removing _cache/tmp...
+cabal run clean  10.36s user 1.25s system 92% cpu 12.613 total</code></pre>
+<p>なんと言うことでしょう。10秒以上待たされました。なんといちいちコンパイルしているのです。 これでは私のようなちょっと書いて実行してみて考える、残念な人にとっては使い物になりません。</p>
+<p>幸いにして<code>cabal.sandbox.config</code>のpackage-dbを食わせてやれば<code>runhaskell</code>でもsandbox中のパッケージを使えるようです。</p>
+<pre class="sh"><code>$ grep package-db cabal.sanbox.config
+package-db: `pwd`/.cabal-sandbox/x86_64-osx-ghc-7.6.3-packages.conf.d
+
+$ time runhaskell -no-user-package-db -package-db=`pwd`/.cabal-sandbox/x86_64-osx-ghc-7.6.3-packages.conf.d site.hs clean
+Removing _site...
+Removing _cache...
+Removing _cache/tmp...
+runhaskell -no-user-package-db  site.hs clean  1.63s user 0.30s system 96% cpu 1.989 total</code></pre>
+<p>ので、これを簡単に実行するプログラムを書きました。便利！</p>
+<pre class="sh"><code>$ time runsandbox site.hs clean
+Removing _site...
+Removing _cache...
+Removing _cache/tmp...
+runsandbox site.hs clean  1.59s user 0.27s system 98% cpu 1.894 tota</code></pre>
+<p>ソースは<a href="https://github.com/philopon/runsandbox">こちら</a></p>
+    </div>
+
+  </div>
+  
+  <div class="post">
+    <div class="page-header">
   <h1><a href="/posts/2014/create_blog.html">Hakyllでgithub.ioにブログ作った</a></h1>
   <div class="clearfix">
     <div class="pull-left"><a href="/tags/hakyll/1.html">hakyll</a>, <a href="/tags/haskell/1.html">haskell</a></div>
@@ -34,7 +82,8 @@
 </div>
 
 
-    <p>テスト投稿を兼ねてこの記事を書いている時の操作について書いておきます。</p>
+    <div class="post-body">
+      <p>テスト投稿を兼ねてこの記事を書いている時の操作について書いておきます。</p>
 <ol style="list-style-type: decimal">
 <li>Hakyllに<code>watch</code>引数を与えて起動する。</li>
 <li>おもむろに記事を書く。<code>localhost:8000</code>でプレビューできる。</li>
@@ -48,6 +97,7 @@
 <li>ルートディレクトリに戻って<code>posts</code>以下をsourcesブランチにpush</li>
 </ol>
 <p>みたいな操作をしております。<code>set -e</code>してるので3で新しいファイルが無かったりするとそこで止まってくれます。<code>set -e</code>便利。</p>
+    </div>
 
   </div>
   
@@ -75,8 +125,16 @@
 
         </div>
         <div class="col-sm-3 col-md-4">
+          <h4>About</h4>
+          <p>Haskellとか好きですけどできません</p>
+          <p><a href="https://twitter.com/philomel202">@philomel202</a></p>
+          <p><a href="https://github.com/philopon">github</a></p>
+
           <h4>Recents</h4>
           <ul class="list-unstyled">
+            
+            <li><a href="/posts/2014/runsanbbox.html">runsandbox作った</a> - 2014-02-26</li>
+
             
             <li><a href="/posts/2014/create_blog.html">Hakyllでgithub.ioにブログ作った</a> - 2014-02-25</li>
 
@@ -84,7 +142,7 @@
           </ul>
           <h4>Tags</h4>
           <ul class="list-unstyled">
-            <li><a href="/tags/hakyll/1.html">hakyll </a><span class="badge">1</span></li><li><a href="/tags/haskell/1.html">haskell </a><span class="badge">1</span></li>
+            <li><a href="/tags/haskell/1.html">haskell </a><span class="badge">2</span></li><li><a href="/tags/cabal/1.html">cabal </a><span class="badge">1</span></li><li><a href="/tags/hakyll/1.html">hakyll </a><span class="badge">1</span></li>
           </ul>
         </div>
       </div>
