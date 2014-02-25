@@ -36,15 +36,15 @@
 
     <p>テスト投稿を兼ねてこの記事を書いている時の操作について書いておきます。</p>
 <ol style="list-style-type: decimal">
-<li>Hakyllを機動する。デフォルトでは<code>site.hs</code>ですね。</li>
-<li>おもむろに記事を書く。<code>localhost:8000</code>でプレビューできるのでブラウザを開いて確認しつつ書いております。</li>
+<li>Hakyllに<code>watch</code>引数を与えて起動する。</li>
+<li>おもむろに記事を書く。<code>localhost:8000</code>でプレビューできる。</li>
 <li>完成したら<a href="https://github.com/philopon/philopon.github.io/blob/sources/deploy.sh">デプロイスクリプト</a>を実行して記事&amp;元のmarkdownファイルをデプロイ。</li>
 </ol>
 <p>デプロイスクリプトでは、</p>
 <ol style="list-style-type: decimal">
-<li><code>site.hs rebuild</code>で最ビルド</li>
+<li><code>site.hs rebuild</code>で再ビルド</li>
 <li><code>_site</code>から<code>rsync</code>で<code>deploy</code>ディレクトリにコピー</li>
-<li><code>deploy</code>ディレクトリ(remote originをphilopon.github.ioにしてる)に移動して全ファイルをgithub pagesのmasterブランチにpush</li>
+<li><code>deploy</code>ディレクトリ(remote originをphilopon.github.ioに、branchをmasterにしてる)に移動して全ファイルをgithub pagesのmasterブランチにpush</li>
 <li>ルートディレクトリに戻って<code>posts</code>以下をsourcesブランチにpush</li>
 </ol>
 <p>みたいな操作をしております。<code>set -e</code>してるので3で新しいファイルが無かったりするとそこで止まってくれます。<code>set -e</code>便利。</p>
