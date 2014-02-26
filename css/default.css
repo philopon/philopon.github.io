@@ -27,6 +27,16 @@ footer {
   line-height: 160%;
 }
 
+.post-body h1 {
+  margin-top: 50px;
+  font-size: 150%;
+}
+
+.post-body h2 {
+  margin-top: 20px;
+  font-size: 130%;
+}
+
 #side-menu .blob:first-child {
   margin-top: 60px;
 }

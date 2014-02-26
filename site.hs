@@ -2,16 +2,20 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Control.Applicative
 import           System.FilePath.Posix
-import           Data.Monoid ((<>))
 import           Hakyll
-import           Data.List(unfoldr)
+
 import qualified Data.Map as M
+import qualified Data.Set as S
+import           Data.Char (toLower)
+import           Data.List(unfoldr,partition)
+import           Data.Monoid ((<>))
+
 import qualified Text.HTML.TagSoup as TS
 import qualified Text.Highlighting.Kate as Kate
 --------------------------------------------------------------------------------
 
 postParPage :: Int
-postParPage = 2
+postParPage = 5
 
 recentCount :: Int
 recentCount = 5
@@ -71,7 +75,10 @@ main = hakyll $ do
 
     match postsPattern $ version "post list" $ do
         route $ customRoute ((<.> "html"). takeDirectory . toFilePath)
-        compile $ pandocCompiler
+        compile $ postCompiler
+            >>= dropAfterMore
+            >>= postLink
+            >>= saveSnapshot "summary"
             >>= loadAndApplyTemplate "templates/post-list.html" (dateField "date" dateFormat <> defaultContext)
 
     let postCxt = postContext tags singlePages
@@ -81,7 +88,7 @@ main = hakyll $ do
         compile $ do 
             postList <- loadAll (postsPattern .&&. hasVersion "post list") :: Compiler [Item String]
 
-            pandocCompiler
+            postCompiler
                 >>= saveSnapshot "raw_post"
                 >>= loadAndApplyTemplate "templates/post.html"    (postCxt postList)
                 >>= loadAndApplyTemplate "templates/default.html" (postCxt postList)
@@ -90,9 +97,10 @@ main = hakyll $ do
     paginateRules multiPages $ \pn pat -> do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAllSnapshots pat "raw_post" :: Compiler [Item String]
+            posts <- recentFirst . filter (matches pat . setVersion Nothing . itemIdentifier) =<<
+                     loadAllSnapshots (postsPattern .&&. hasVersion "post list") "summary" :: Compiler [Item String]
             postList <- loadAll (postsPattern .&&. hasVersion "post list") :: Compiler [Item String]
-            
+
             let paginate = paginateField
                     (\p -> return . fromFilePath $ 
                         if p == 1
@@ -118,7 +126,8 @@ main = hakyll $ do
         paginateRules tagPages $ \pn pat' -> do
             route idRoute
             compile $ do
-                posts <- recentFirst =<< loadAllSnapshots pat' "raw_post"
+                posts <- recentFirst . filter (matches pat . setVersion Nothing . itemIdentifier) =<<
+                         loadAllSnapshots (postsPattern .&&. hasVersion "post list") "summary" :: Compiler [Item String]
                 postList <- loadAll (postsPattern .&&. hasVersion "post list") :: Compiler [Item String]
 
                 let paginate = paginateField
@@ -184,10 +193,12 @@ postLink item = do
     return $ case mbr of
         Nothing -> item
         Just r  -> fmap (withUrls $ process r) item
-  where process r url =
-          if isRelative url && not (isExternal url)
-          then normalise $ "/" </> dropExtension r </> url
-          else url
+  where 
+    process r [] = []
+    process r url@(h:t)
+        | h == '#'                               = "/" </> r ++ url
+        | isRelative url && not (isExternal url) = normalise $ "/" </> dropExtension r </> url
+        | otherwise                              = url
 
 paginateField :: (Int -> Compiler Identifier) -> Paginate -> Int -> Context String
 paginateField f paginate pn = listField "paginate"
@@ -196,6 +207,30 @@ paginateField f paginate pn = listField "paginate"
         then return "active"
         else fail "") <> defaultContext)
     (mapM (\n -> f n >>= \i -> return $ Item i (show n)) [1 .. nPages paginate])
+
+addClass :: String -> TS.Tag String -> TS.Tag String
+addClass cls (TS.TagOpen name attr) = case partition ((== "class") . fst) attr of
+    ([],         _)     -> TS.TagOpen name $ ("class", cls) : attr
+    ((_,cls'):_, attr') -> TS.TagOpen name $ ("class", cls ++ ' ': cls') : attr'
+addClass _ tag = tag
+
+postCompiler :: Compiler (Item String)
+postCompiler = fmap (withTags process) <$> pandocCompiler
+  where process tag | TS.isTagOpenName "table" tag = addClass "table" tag
+                    | otherwise                    = tag
+
+dropAfterMore :: Item String -> Compiler (Item String)
+dropAfterMore item =
+    applyAsTemplate defaultContext $ renderTags'. process. TS.parseTags <$> item
+  where process []                                      = []
+        process (TS.TagComment c:_) | strip c == "more" = [ TS.TagOpen "a" [("href", "$url$"), ("class", "readmore")]
+                                                          , TS.TagText "read more"
+                                                          , TS.TagClose "a"]
+        process (o:ts)                                  = o:process ts
+
+strip :: String -> String
+strip = f . f
+  where f = dropWhile (`elem` (" \t" :: String)) . reverse
 
 --------------------------------------------------------------------------------
 
@@ -227,3 +262,14 @@ createPaginate pattern = do
     return $ Paginate pagPages pagPlaces makeId
         (PatternDependency pattern idents)
 
+renderTags' :: [TS.Tag String] -> String
+renderTags' = TS.renderTagsOptions TS.renderOptions
+    { TS.optRawTag   = (`elem` ["script", "style"]) . map toLower
+    , TS.optMinimize = (`S.member` minimize) . map toLower
+    }
+  where
+    -- A list of elements which must be minimized
+    minimize = S.fromList
+        [ "area", "br", "col", "embed", "hr", "img", "input", "meta", "link"
+        , "param"
+        ]
