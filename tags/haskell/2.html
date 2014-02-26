@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>About:Blank - cabal - 1</title>
+    <title>About:Blank - haskell - 2</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/css/default.css" />
     <link rel="stylesheet" type="text/css" href="/css/highlight.css" />
@@ -37,52 +37,29 @@ ga('send', 'pageview');
   
   <div class="post">
     <div class="page-header">
-  <h1><a href="/posts/2014/runsanbbox.html">runsandbox作った</a></h1>
+  <h1><a href="/posts/2014/create_blog.html">Hakyllでgithub.ioにブログ作った</a></h1>
   <div class="clearfix">
-    <div class="pull-left"><a href="/tags/haskell/1.html">haskell</a>, <a href="/tags/cabal/1.html">cabal</a></div>
-    <div class="pull-right">Posted on 2014-02-26</div>
+    <div class="pull-left"><a href="/tags/hakyll/1.html">hakyll</a>, <a href="/tags/haskell/1.html">haskell</a></div>
+    <div class="pull-right">Posted on 2014-02-25</div>
   </div>
 </div>
 
 
     <div class="post-body">
-      <h1 id="概要">概要</h1>
-<p>cabal runの立ち上がりが遅いのでrunhaskellを使うrunsandboxを作った</p>
-<!-- more -->
-
-<h1 id="動機">動機</h1>
-<p><code>cabal sandbox</code>使ってますか？私は使ってませんでした。</p>
-<p>プロジェクト毎にコンパイルするの、特にyesodとかの巨大パッケージだと死ねます。まぁそれは最初の一回だけなので我慢しましょう。ぐっと我慢して使い始めてさあ実行してみよう、と<code>cabal run</code>すると……</p>
-<pre class="sh"><code>$ time cabal run clean
-Package has never been configured. Configuring with default flags. If this
-fails, please run configure manually.
-Resolving dependencies...
-Configuring githubio-0.1.0.0...
-Preprocessing executable 'githubio' for githubio-0.1.0.0...
-[1 of 1] Compiling Main             ( site.hs, dist/build/githubio/githubio-tmp/Main.o )
-Linking dist/build/githubio/githubio ...
-Removing _site...
-Removing _cache...
-Removing _cache/tmp...
-cabal run clean  10.36s user 1.25s system 92% cpu 12.613 total</code></pre>
-<p>なんと言うことでしょう。10秒以上待たされました。なんといちいちコンパイルしているのです。 これでは私のようなちょっと書いて実行してみて考える、残念な人にとっては使い物になりません。</p>
-<h1 id="解決法">解決法</h1>
-<p>幸いにして<code>cabal.sandbox.config</code>のpackage-dbを食わせてやれば<code>runhaskell</code>でもsandbox中のパッケージを使えるようです。</p>
-<pre class="sh"><code>$ grep package-db cabal.sanbox.config
-package-db: `pwd`/.cabal-sandbox/x86_64-osx-ghc-7.6.3-packages.conf.d
-
-$ time runhaskell -no-user-package-db -package-db=`pwd`/.cabal-sandbox/x86_64-osx-ghc-7.6.3-packages.conf.d site.hs clean
-Removing _site...
-Removing _cache...
-Removing _cache/tmp...
-runhaskell -no-user-package-db  site.hs clean  1.63s user 0.30s system 96% cpu 1.989 total</code></pre>
-<p>ので、これを簡単に実行するプログラムを書きました。便利！</p>
-<pre class="sh"><code>$ time runsandbox site.hs clean
-Removing _site...
-Removing _cache...
-Removing _cache/tmp...
-runsandbox site.hs clean  1.59s user 0.27s system 98% cpu 1.894 tota</code></pre>
-<p>ソースは<a href="https://github.com/philopon/runsandbox">こちら</a></p>
+      <p>テスト投稿を兼ねてこの記事を書いている時の操作について書いておきます。</p>
+<ol style="list-style-type: decimal">
+<li>Hakyllに<code>watch</code>引数を与えて起動する。</li>
+<li>おもむろに記事を書く。<code>localhost:8000</code>でプレビューできる。</li>
+<li>完成したら<a href="https://github.com/philopon/philopon.github.io/blob/sources/deploy.sh">デプロイスクリプト</a>を実行して記事&amp;元のmarkdownファイルをデプロイ。</li>
+</ol>
+<p>デプロイスクリプトでは、</p>
+<ol style="list-style-type: decimal">
+<li><code>site.hs rebuild</code>で再ビルド</li>
+<li><code>_site</code>から<code>rsync</code>で<code>deploy</code>ディレクトリにコピー</li>
+<li><code>deploy</code>ディレクトリ(remote originをphilopon.github.ioに、branchをmasterにしてる)に移動して全ファイルをgithub pagesのmasterブランチにpush</li>
+<li>ルートディレクトリに戻って<code>posts</code>以下をsourcesブランチにpush</li>
+</ol>
+<p>みたいな操作をしております。<code>set -e</code>してるので3で新しいファイルが無かったりするとそこで止まってくれます。<code>set -e</code>便利。</p>
     </div>
 
   </div>
@@ -98,7 +75,11 @@ runsandbox site.hs clean  1.59s user 0.27s system 98% cpu 1.894 tota</code></pre
 
     
     
-    <li class="active"><a>1</a></li>
+    <li><a href="/tags/haskell/1.html">1</a></li>
+    
+    
+    
+    <li class="active"><a>2</a></li>
     
     
 
