@@ -126,7 +126,7 @@ main = hakyll $ do
         paginateRules tagPages $ \pn pat' -> do
             route idRoute
             compile $ do
-                posts <- recentFirst . filter (matches pat . setVersion Nothing . itemIdentifier) =<<
+                posts <- recentFirst . filter (matches pat' . setVersion Nothing . itemIdentifier) =<<
                          loadAllSnapshots (postsPattern .&&. hasVersion "post list") "summary" :: Compiler [Item String]
                 postList <- loadAll (postsPattern .&&. hasVersion "post list") :: Compiler [Item String]
 
@@ -194,8 +194,8 @@ postLink item = do
         Nothing -> item
         Just r  -> fmap (withUrls $ process r) item
   where 
-    process r [] = []
-    process r url@(h:t)
+    process _ [] = []
+    process r url@(h:_)
         | h == '#'                               = "/" </> r ++ url
         | isRelative url && not (isExternal url) = normalise $ "/" </> dropExtension r </> url
         | otherwise                              = url
