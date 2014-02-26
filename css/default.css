@@ -19,7 +19,7 @@ footer {
   color: #777;
 }
 
-.page-header a {
+.page-header h1 a {
   color: black;
 }
 
@@ -43,4 +43,9 @@ footer {
 
 #side-menu .blob {
   margin-bottom: 30px;
+}
+
+.post-date {
+  font-style: italic;
+  color: #999;
 }
