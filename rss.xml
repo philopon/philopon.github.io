@@ -6,28 +6,8 @@
         <description><![CDATA[]]></description>
         <atom:link href="http://philopon.github.io//rss.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Tue, 25 Feb 2014 23:50:52 UT</lastBuildDate>
+        <lastBuildDate>Wed, 26 Feb 2014 16:10:05 UT</lastBuildDate>
         <item>
-    <title>Hakyllでgithub.ioにブログ作った</title>
-    <link>http://philopon.github.io//posts/2014/create_blog.html</link>
-    <description><![CDATA[<p>テスト投稿を兼ねてこの記事を書いている時の操作について書いておきます。</p>
-<ol style="list-style-type: decimal">
-<li>Hakyllに<code>watch</code>引数を与えて起動する。</li>
-<li>おもむろに記事を書く。<code>localhost:8000</code>でプレビューできる。</li>
-<li>完成したら<a href="https://github.com/philopon/philopon.github.io/blob/sources/deploy.sh">デプロイスクリプト</a>を実行して記事&amp;元のmarkdownファイルをデプロイ。</li>
-</ol>
-<p>デプロイスクリプトでは、</p>
-<ol style="list-style-type: decimal">
-<li><code>site.hs rebuild</code>で再ビルド</li>
-<li><code>_site</code>から<code>rsync</code>で<code>deploy</code>ディレクトリにコピー</li>
-<li><code>deploy</code>ディレクトリ(remote originをphilopon.github.ioに、branchをmasterにしてる)に移動して全ファイルをgithub pagesのmasterブランチにpush</li>
-<li>ルートディレクトリに戻って<code>posts</code>以下をsourcesブランチにpush</li>
-</ol>
-<p>みたいな操作をしております。<code>set -e</code>してるので3で新しいファイルが無かったりするとそこで止まってくれます。<code>set -e</code>便利。</p>]]></description>
-    <pubDate>Tue, 25 Feb 2014 23:50:52 UT</pubDate>
-    <guid>http://philopon.github.io//posts/2014/create_blog.html</guid>
-</item>
-<item>
     <title>Hakyll tips</title>
     <link>http://philopon.github.io//posts/2014/hakyll_tips.html</link>
     <description><![CDATA[<p>lhs文書のテストも兼ねて、ここを作るときに使ったあれこれを書き出しておきます。随時更新。</p>
@@ -149,6 +129,26 @@ runsandbox site.hs clean  1.59s user 0.27s system 98% cpu 1.894 tota</code></pre
 <p>ソースは<a href="https://github.com/philopon/runsandbox">こちら</a></p>]]></description>
     <pubDate>Wed, 26 Feb 2014 00:53:15 UT</pubDate>
     <guid>http://philopon.github.io//posts/2014/runsanbbox.html</guid>
+</item>
+<item>
+    <title>Hakyllでgithub.ioにブログ作った</title>
+    <link>http://philopon.github.io//posts/2014/create_blog.html</link>
+    <description><![CDATA[<p>テスト投稿を兼ねてこの記事を書いている時の操作について書いておきます。</p>
+<ol style="list-style-type: decimal">
+<li>Hakyllに<code>watch</code>引数を与えて起動する。</li>
+<li>おもむろに記事を書く。<code>localhost:8000</code>でプレビューできる。</li>
+<li>完成したら<a href="https://github.com/philopon/philopon.github.io/blob/sources/deploy.sh">デプロイスクリプト</a>を実行して記事&amp;元のmarkdownファイルをデプロイ。</li>
+</ol>
+<p>デプロイスクリプトでは、</p>
+<ol style="list-style-type: decimal">
+<li><code>site.hs rebuild</code>で再ビルド</li>
+<li><code>_site</code>から<code>rsync</code>で<code>deploy</code>ディレクトリにコピー</li>
+<li><code>deploy</code>ディレクトリ(remote originをphilopon.github.ioに、branchをmasterにしてる)に移動して全ファイルをgithub pagesのmasterブランチにpush</li>
+<li>ルートディレクトリに戻って<code>posts</code>以下をsourcesブランチにpush</li>
+</ol>
+<p>みたいな操作をしております。<code>set -e</code>してるので3で新しいファイルが無かったりするとそこで止まってくれます。<code>set -e</code>便利。</p>]]></description>
+    <pubDate>Tue, 25 Feb 2014 23:50:52 UT</pubDate>
+    <guid>http://philopon.github.io//posts/2014/create_blog.html</guid>
 </item>
 
     </channel> 
