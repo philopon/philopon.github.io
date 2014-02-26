@@ -134,6 +134,7 @@ main = hakyll $ do
                         (\p -> return . fromFilePath $ "tags" </> tag </> show p <.> "html")
                         tagPages pn
                 let tagsCxt =
+                        constField "subbrand" ("Tag:" ++ tag) <>
                         paginate <>
                         constField "title" (tag ++ " - " ++ show pn)    <>
                         listField "posts" (postCxt postList) (mapM postLink posts) <>
@@ -166,6 +167,7 @@ nPages = M.size . paginatePages
 
 globalContext :: Tags -> [Item String] -> Context String
 globalContext tags pl =
+    constField "subbrand" "" <>
     listField "postList" defaultContext (take recentCount <$> recentFirst pl) <>
     field "taglist" (const $ renderTags tagFunc concat tags) <>
     defaultContext
