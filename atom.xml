@@ -42,7 +42,7 @@
 <li><a href="#ハイライトのcssどうするの">ハイライトのcssどうするの</a></li>
 <li><a href="#元々minifyされているcssはライセンス書いてるしcomplessしたくない">元々minifyされているcssはライセンス書いてるしcomplessしたくない</a></li>
 <li><a href="#タグごとのページもpaginateしたい">タグごとのページもpaginateしたい</a></li>
-<li><a href="#表にはtableクラスを付けないとbootstrapが！">表にはtableクラスを付けないとbootstrapが！</a></li>
+<li><a href="#表にはtableクラスを付けないとbootstrapが">表にはtableクラスを付けないとbootstrapが！</a></li>
 </ul>
 <p><!-- more --></p>
 <pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-#LANGUAGE OverloadedStrings #-}</span>

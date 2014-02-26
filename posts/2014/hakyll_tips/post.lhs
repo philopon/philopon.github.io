@@ -11,7 +11,7 @@ lhs文書のテストも兼ねて、ここを作るときに使ったあれこ�
 * [ハイライトのcssどうするの](#ハイライトのcssどうするの)
 * [元々minifyされているcssはライセンス書いてるしcomplessしたくない](#元々minifyされているcssはライセンス書いてるしcomplessしたくない)
 * [タグごとのページもpaginateしたい](#タグごとのページもpaginateしたい)
-* [表にはtableクラスを付けないとbootstrapが！](#表にはtableクラスを付けないとbootstrapが！)
+* [表にはtableクラスを付けないとbootstrapが！](#表にはtableクラスを付けないとbootstrapが)
 
  <!-- more -->
 
