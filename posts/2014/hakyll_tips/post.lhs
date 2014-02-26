@@ -6,6 +6,8 @@ tags:  haskell, hakyll, tips
 
 lhs文書のテストも兼ねて、ここを作るときに使ったあれこれを書き出しておきます。随時更新。
 
+lhsで書いているのでヘッダーの`source`リンクからダウンロードしてそのまま実行する事が可能です。
+
 もくじ
 ====
 * [ハイライトのcssどうするの](#ハイライトのcssどうするの)
@@ -57,7 +59,7 @@ not    complement
 =====
 
 普通にネストできます。すごい。
-長いので[ソースコード](https://github.com/philopon/philopon.github.io/blob/sources/site.hs)の107行目あたり参照
+長いので[ソースコード](https://github.com/philopon/philopon.github.io/blob/b87a2b45c165cd40ceb526ea8347ba828774cc1c/site.hs#L123-L143)参照
 
 表にはtableクラスを付けないとbootstrapが！
 ====
