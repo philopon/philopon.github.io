@@ -146,14 +146,14 @@ main = hakyll $ do
         route idRoute
         compile $ do
             let feedCxt = bodyField "description" <> (postCxt [])
-            posts <- loadAllSnapshots (postsPattern .&&. hasNoVersion) "raw_post"
+            posts <- recentFirst =<< loadAllSnapshots (postsPattern .&&. hasNoVersion) "raw_post"
             renderAtom feedConfig feedCxt posts
     
     create ["rss.xml"] $ do
         route idRoute
         compile $ do
             let feedCxt = bodyField "description" <> (postCxt [])
-            posts <- loadAllSnapshots (postsPattern .&&. hasNoVersion) "raw_post"
+            posts <- recentFirst =<< loadAllSnapshots (postsPattern .&&. hasNoVersion) "raw_post"
             renderRss feedConfig feedCxt posts
 
 tagOrder :: (String, [Identifier]) -> (String, [Identifier]) -> Ordering
