@@ -110,9 +110,10 @@ main = hakyll $ do
                 pagesCxt =
                     paginate <>
                     field "title" (\i ->  
-                        if itemIdentifier i == "index.html"
-                          then return "Home"
-                          else return $ "All posts - " ++ show pn) <>
+                        return $ 
+                            if itemIdentifier i == "index.html"
+                            then "Home"
+                            else "All posts - " ++ show pn) <>
                     paginateContext multiPages        <>
                     listField "posts" (postCxt postList) (mapM postLink posts) <>
                     globalContext tags postList
@@ -217,9 +218,22 @@ addClass cls (TS.TagOpen name attr) = case partition ((== "class") . fst) attr o
 addClass _ tag = tag
 
 postCompiler :: Compiler (Item String)
-postCompiler = fmap (withTags process) <$> pandocCompiler
-  where process tag | TS.isTagOpenName "table" tag = addClass "table" tag
-                    | otherwise                    = tag
+postCompiler = 
+    fmap ( renderTags'
+         . snd . foldr addImageLink (False, [])
+         . map addTableClass . TS.parseTags) <$>
+    pandocCompiler
+  where addTableClass tag | TS.isTagOpenName "table" tag = addClass "table" tag
+                          | otherwise                    = tag
+        addImageLink i (a, r)
+            | TS.isTagOpenName   "a" i      = (True, i:r)
+            | TS.isTagCloseName  "a" i      = (False, i:r)
+            | TS.isTagOpenName "img" i && a = (False, addLink i ++ r)
+            | otherwise                     = (a, i:r)
+        addLink img@(TS.TagOpen _ attr) = case lookup "src" attr of
+            Nothing  -> [img]
+            Just src -> [TS.TagOpen "a" [("href", src)], img, TS.TagClose "a"]
+        addLink _ = error "addLink: only TagOpen expected."
 
 dropAfterMore :: Item String -> Compiler (Item String)
 dropAfterMore item =
