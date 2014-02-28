@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings, NoMonomorphismRestriction #-}
 import           Control.Applicative
+import           Control.Monad
 import           System.FilePath.Posix
 import           Hakyll
 
@@ -12,7 +13,7 @@ import           Data.Monoid (mempty, (<>))
 
 import qualified Text.HTML.TagSoup as TS
 import qualified Text.Highlighting.Kate as Kate
-import SearchIndex
+import           SearchIndex
 --------------------------------------------------------------------------------
 
 rootAddress :: String
@@ -100,9 +101,9 @@ main = hakyll $ do
 
             items <- pandocCompiler
 
-            saveSnapshot "plain" (fmap stripTags items)
+            void $ saveSnapshot "plain" (fmap stripTags items)
 
-            dropAfterMore items >>= postLink >>= saveSnapshot "summary"
+            void $ dropAfterMore items >>= postLink >>= saveSnapshot "summary"
 
             saveSnapshot "raw_post" items
                 >>= loadAndApplyTemplate "templates/post.html"    (postCxt postList)
