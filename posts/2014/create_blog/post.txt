@@ -1,0 +1,14 @@
+テスト投稿を兼ねてこの記事を書いている時の操作について書いておきます。
+
+Hakyllにwatch引数を与えて起動する。
+おもむろに記事を書く。localhost:8000でプレビューできる。
+完成したらデプロイスクリプトを実行して記事&amp;元のmarkdownファイルをデプロイ。
+
+デプロイスクリプトでは、
+
+site.hs rebuildで再ビルド
+_siteからrsyncでdeployディレクトリにコピー
+deployディレクトリ(remote originをphilopon.github.ioに、branchをmasterにしてる)に移動して全ファイルをgithub pagesのmasterブランチにpush
+ルートディレクトリに戻ってposts以下をsourcesブランチにpush
+
+みたいな操作をしております。set -eしてるので3で新しいファイルが無かったりするとそこで止まってくれます。set -e便利。
