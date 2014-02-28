@@ -68,13 +68,14 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateCompiler
 
-    match ("posts/**" .&&. complement postsPattern) $ version "raw" $ do
+    match "posts/**" $ version "raw" $ do
         route idRoute
         compile copyFileCompiler
 
-    tags <- sortTagsBy tagOrder <$> buildTags postsPattern (\tag -> fromFilePath $ "tags" </> tag </> "1.html")
+    tags <- sortTagsBy tagOrder <$> 
+            buildTags (postsPattern .&&. hasNoVersion) (\tag -> fromFilePath $ "tags" </> tag </> "1.html")
 
-    singlePages <- createPaginate postsPattern
+    singlePages <- createPaginate (postsPattern .&&. hasNoVersion)
 
     multiPages  <- createPaginateWith postParPage 
         (\pn -> if pn == 1 
@@ -85,9 +86,6 @@ main = hakyll $ do
     match postsPattern $ version "post list" $ do
         route mempty
         compile $ postCompiler
-            >>= dropAfterMore
-            >>= postLink
-            >>= saveSnapshot "summary"
             >>= loadAndApplyTemplate "templates/post-list.html"
                 ( field "url" (return . ("/" </>) . postRoute . itemIdentifier) <>
                   dateField "date" dateFormat <> 
@@ -100,22 +98,22 @@ main = hakyll $ do
         compile $ do 
             postList <- loadAll (postsPattern .&&. hasVersion "post list") :: Compiler [Item String]
 
-            postCompiler
-                >>= saveSnapshot "raw_post"
+            items <- pandocCompiler
+
+            saveSnapshot "plain" (fmap stripTags items)
+
+            dropAfterMore items >>= postLink >>= saveSnapshot "summary"
+
+            saveSnapshot "raw_post" items
                 >>= loadAndApplyTemplate "templates/post.html"    (postCxt postList)
                 >>= loadAndApplyTemplate "templates/default.html" (postCxt postList)
                 >>= postLink
-
-    match postsPattern $ version "raw" $ do
-        route mempty
-        compile $ pandocCompiler
-            >>= return . fmap stripTags
 
     paginateRules multiPages $ \pn pat -> do
         route idRoute
         compile $ do
             posts <- recentFirst . filter (matches pat . setVersion Nothing . itemIdentifier) =<<
-                     loadAllSnapshots (postsPattern .&&. hasVersion "post list") "summary" :: Compiler [Item String]
+                     loadAllSnapshots (postsPattern .&&. hasNoVersion) "summary" :: Compiler [Item String]
             postList <- loadAll (postsPattern .&&. hasVersion "post list") :: Compiler [Item String]
 
             let paginate = paginateField
@@ -145,7 +143,7 @@ main = hakyll $ do
             route idRoute
             compile $ do
                 posts <- recentFirst . filter (matches pat' . setVersion Nothing . itemIdentifier) =<<
-                         loadAllSnapshots (postsPattern .&&. hasVersion "post list") "summary" :: Compiler [Item String]
+                         loadAllSnapshots (postsPattern .&&. hasNoVersion) "summary" :: Compiler [Item String]
                 postList <- loadAll (postsPattern .&&. hasVersion "post list") :: Compiler [Item String]
 
                 let paginate = paginateField
@@ -164,7 +162,7 @@ main = hakyll $ do
     create ["search.json"] $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll (postsPattern .&&. hasVersion "raw") :: Compiler [Item String]
+            posts <- recentFirst =<< loadAllSnapshots (postsPattern .&&. hasNoVersion) "plain" :: Compiler [Item String]
             let cxt = field "url" (return . ("/" </>) . postRoute . itemIdentifier) <> postCxt []
             Item "search.json" <$> searchIndex cxt descriptionLength [] posts
 
