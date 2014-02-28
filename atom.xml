@@ -41,7 +41,7 @@
 <span class="ot">&gt;</span>     compile <span class="fu">$</span> makeItem (Kate.styleToCss Kate.kate)</code></pre>
 <h1 id="元々minifyされているcssはライセンス書いてるしcomplessしたくない">元々minifyされているcssはライセンス書いてるしcomplessしたくない</h1>
 <p><code>Patterns</code>用の論理演算を使いましょう。</p>
-<table class="table">
+<table>
 <thead>
 <tr class="header">
 <th align="left">Bool</th>
@@ -78,7 +78,7 @@
 <pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt; addClass ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">TS.Tag</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">TS.Tag</span> <span class="dt">String</span>
 <span class="ot">&gt;</span> addClass cls (<span class="dt">TS.TagOpen</span> name attr) <span class="fu">=</span> <span class="kw">case</span> partition ((<span class="fu">==</span> <span class="st">&quot;class&quot;</span>) <span class="fu">.</span> fst) attr <span class="kw">of</span>
 <span class="ot">&gt;</span>     ([],         _)     <span class="ot">-&gt;</span> <span class="dt">TS.TagOpen</span> name <span class="fu">$</span> (<span class="st">&quot;class&quot;</span>, cls) <span class="fu">:</span> attr
-<span class="ot">&gt;</span>     ((_,cls')<span class="fu">:</span>_, attr') <span class="ot">-&gt;</span> <span class="dt">TS.TagOpen</span> name <span class="fu">$</span> (<span class="st">&quot;class&quot;</span>, cls <span class="fu">++</span> <span class="ch">' '</span><span class="fu">:</span> cls') <span class="fu">:</span> attr'
+<span class="ot">&gt;</span>     ((_,cls&#39;)<span class="fu">:</span>_, attr&#39;) <span class="ot">-&gt;</span> <span class="dt">TS.TagOpen</span> name <span class="fu">$</span> (<span class="st">&quot;class&quot;</span>, cls <span class="fu">++</span> <span class="ch">&#39; &#39;</span><span class="fu">:</span> cls&#39;) <span class="fu">:</span> attr&#39;
 <span class="ot">&gt;</span> addClass _ tag <span class="fu">=</span> tag
 <span class="ot">&gt;</span> 
 <span class="ot">&gt; postCompiler ::</span> <span class="dt">Compiler</span> (<span class="dt">Item</span> <span class="dt">String</span>)
@@ -109,7 +109,7 @@ Package has never been configured. Configuring with default flags. If this
 fails, please run configure manually.
 Resolving dependencies...
 Configuring githubio-0.1.0.0...
-Preprocessing executable 'githubio' for githubio-0.1.0.0...
+Preprocessing executable &#39;githubio&#39; for githubio-0.1.0.0...
 [1 of 1] Compiling Main             ( site.hs, dist/build/githubio/githubio-tmp/Main.o )
 Linking dist/build/githubio/githubio ...
 Removing _site...
