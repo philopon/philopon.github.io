@@ -32,10 +32,11 @@ ga('send', 'pageview');
     </nav>
 
     <div class="container">
-      <div class="row">
-        <div class="col-sm-9 col-md-8">
-          <div class="post">
-  <div class="page-header">
+      <div class="column-container row">
+        <div class="posts-column col-sm-9 col-md-8">
+          <div class="single-post">
+  <div class="post">
+    <div class="page-header">
   <h1><a href="/posts/2014/create_blog.html">Hakyllでgithub.ioにブログ作った</a></h1>
   <div class="post-date">Posted on 2014-02-25</div>
   <div class="clearfix">
@@ -45,8 +46,8 @@ ga('send', 'pageview');
 </div>
 
 
-  <div class="post-body">
-    <p>テスト投稿を兼ねてこの記事を書いている時の操作について書いておきます。</p>
+    <div class="post-body">
+      <p>テスト投稿を兼ねてこの記事を書いている時の操作について書いておきます。</p>
 <ol style="list-style-type: decimal">
 <li>Hakyllに<code>watch</code>引数を与えて起動する。</li>
 <li>おもむろに記事を書く。<code>localhost:8000</code>でプレビューできる。</li>
@@ -60,41 +61,42 @@ ga('send', 'pageview');
 <li>ルートディレクトリに戻って<code>posts</code>以下をsourcesブランチにpush</li>
 </ol>
 <p>みたいな操作をしております。<code>set -e</code>してるので3で新しいファイルが無かったりするとそこで止まってくれます。<code>set -e</code>便利。</p>
-  </div>
+    </div>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'philopon'; // required: replace example with your forum shortname
 
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </div>
 </div>
 
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-var disqus_shortname = 'philopon'; // required: replace example with your forum shortname
+  <ul class="pager">
+    
+    <li class="previous"><a href="/posts/2014/runsanbbox.html">← Newer</a></li>
+    
 
-/* * * DON'T EDIT BELOW THIS LINE * * */
-(function() {
- var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
- dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
- (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
- })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-<ul class="pager">
-  
-  <li class="previous"><a href="/posts/2014/runsanbbox.html">← Newer</a></li>
-  
-
-  
-  <li class="next disabled"><a>Older →</a></li>
-  
-</ul>
+    
+    <li class="next disabled"><a>Older →</a></li>
+    
+  </ul>
 
         </div>
-        <div id="side-menu" class="col-sm-3 col-md-4">
+        <div class="sidemenu-column col-sm-3 col-md-4">
 
           <div class="blob">
             <h4>About</h4>
-            <div id="youjava">
+            <div class="youjava">
               <p>あなたとHaskell,<BR>いますぐダウンロー<BR>ド</p>
               <a href="http://www.haskell.org/platform/">無料Haskellのダウンロード</a>
             </div>
