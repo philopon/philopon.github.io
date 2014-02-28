@@ -26,8 +26,11 @@
 
       var is = d.dict[query];
       if(!is) return false;
+      var added = [];
 
       for(var i = 0; i < is.length; i++){
+        if (added.indexOf(is[i]) >= 0) break;
+        added.push(is[i]);
         var result = d.pages[is[i]];
 
         var post = document.createElement('div');
