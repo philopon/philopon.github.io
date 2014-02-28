@@ -8,7 +8,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import           Data.Char (toLower)
 import           Data.List(unfoldr,partition)
-import           Data.Monoid ((<>))
+import           Data.Monoid (mempty, (<>))
 
 import qualified Text.HTML.TagSoup as TS
 import qualified Text.Highlighting.Kate as Kate
@@ -37,6 +37,9 @@ feedConfig = FeedConfiguration
     , feedAuthorEmail = ""
     , feedRoot        = rootAddress
     }
+
+postRoute :: Identifier -> FilePath
+postRoute = ((<.> "html"). takeDirectory . toFilePath)
 
 main :: IO ()
 main = hakyll $ do
@@ -77,17 +80,20 @@ main = hakyll $ do
         (postsPattern .&&. hasNoVersion)
 
     match postsPattern $ version "post list" $ do
-        route $ customRoute ((<.> "html"). takeDirectory . toFilePath)
+        route mempty
         compile $ postCompiler
             >>= dropAfterMore
             >>= postLink
             >>= saveSnapshot "summary"
-            >>= loadAndApplyTemplate "templates/post-list.html" (dateField "date" dateFormat <> defaultContext)
+            >>= loadAndApplyTemplate "templates/post-list.html"
+                ( field "url" (return . ("/" </>) . postRoute . itemIdentifier) <>
+                  dateField "date" dateFormat <> 
+                  defaultContext)
 
     let postCxt = postContext tags singlePages
 
     paginateRules singlePages $ \_ _ -> do
-        route   $ customRoute ((<.> "html"). takeDirectory . toFilePath)
+        route   $ customRoute postRoute
         compile $ do 
             postList <- loadAll (postsPattern .&&. hasVersion "post list") :: Compiler [Item String]
 
