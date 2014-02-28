@@ -11,6 +11,8 @@
     <link rel="stylesheet" type="text/css" href="/css/highlight.css" />
     <link rel="alternate" type="application/atom+xml" href="/atom.xml" />
     <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
+    <script type="text/javascript" src="/js/default.js"></script>
+    $inheader$
     <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -28,7 +30,14 @@ ga('send', 'pageview');
         <div class="navbar-header">
           <a href="/" class="navbar-brand">About:Blank</a>
         </div>
-        <p class="navbar-text">$subbrand$</p>
+        <p class="navbar-text navbar-subbrand">$subbrand$</p>
+
+        <form class="navbar-form navbar-right search-post">
+          <input type="text" class="form-control" placeholder="単語検索" />
+          <button type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </form>
       </div>
     </nav>
 

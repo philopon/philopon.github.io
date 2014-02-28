@@ -4,7 +4,7 @@ set -e
 
 cd `dirname $0`
 
-cabal build
+cabal build --ghc-option=-L/usr/local/lib
 ./githubio rebuild
 rsync -av --delete --exclude=.git _site/ deploy
 

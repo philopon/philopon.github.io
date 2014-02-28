@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, NoMonomorphismRestriction #-}
 import           Control.Applicative
 import           System.FilePath.Posix
 import           Hakyll
@@ -12,6 +12,7 @@ import           Data.Monoid (mempty, (<>))
 
 import qualified Text.HTML.TagSoup as TS
 import qualified Text.Highlighting.Kate as Kate
+import SearchIndex
 --------------------------------------------------------------------------------
 
 rootAddress :: String
@@ -29,6 +30,16 @@ postsPattern = "posts/**/post.*"
 dateFormat :: String
 dateFormat = "%Y-%m-%d"
 
+descriptionLength :: Int
+descriptionLength = 100
+
+searchScripts :: String
+searchScripts = unlines
+    [ "<script type='text/javascript' src='/js/purl.js' ></script>"
+    , "<script type='text/javascript' src='/js/ajax.js' ></script>"
+    , "<script type='text/javascript' src='/js/search.js' ></script>"
+    ]
+
 feedConfig :: FeedConfiguration
 feedConfig = FeedConfiguration
     { feedTitle       = "About:Blank"
@@ -43,16 +54,8 @@ postRoute = ((<.> "html"). takeDirectory . toFilePath)
 
 main :: IO ()
 main = hakyll $ do
-    match "images/*" $ do
+    match ("images/*" .||. "fonts/*" .||. "js/*" .||. "css/*.min.css") $ do
         route   idRoute
-        compile copyFileCompiler
-
-    match "fonts/*" $ do
-        route idRoute
-        compile copyFileCompiler
-
-    match "css/*.min.css" $ do
-        route idRoute
         compile copyFileCompiler
 
     match ("css/*" .&&. complement "css/*.min.css") $ do
@@ -65,7 +68,7 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateCompiler
 
-    match "posts/**" $ version "raw" $ do
+    match ("posts/**" .&&. complement postsPattern) $ version "raw" $ do
         route idRoute
         compile copyFileCompiler
 
@@ -102,6 +105,11 @@ main = hakyll $ do
                 >>= loadAndApplyTemplate "templates/post.html"    (postCxt postList)
                 >>= loadAndApplyTemplate "templates/default.html" (postCxt postList)
                 >>= postLink
+
+    match postsPattern $ version "raw" $ do
+        route mempty
+        compile $ pandocCompiler
+            >>= return . fmap stripTags
 
     paginateRules multiPages $ \pn pat -> do
         route idRoute
@@ -153,6 +161,24 @@ main = hakyll $ do
                     >>= loadAndApplyTemplate "templates/multipost.html" tagsCxt
                     >>= loadAndApplyTemplate "templates/default.html"   tagsCxt
 
+    create ["search.json"] $ do
+        route idRoute
+        compile $ do
+            posts <- recentFirst =<< loadAll (postsPattern .&&. hasVersion "raw") :: Compiler [Item String]
+            let cxt = field "url" (return . ("/" </>) . postRoute . itemIdentifier) <> postCxt []
+            Item "search.json" <$> searchIndex cxt descriptionLength [] posts
+
+    create ["search.html"] $ do
+        route idRoute
+        compile $ do
+            postList <- loadAll (postsPattern .&&. hasVersion "post list") :: Compiler [Item String]
+            let cxt = constField "inheader" searchScripts <>
+                      constField "subbrand" "Search: "    <>
+                      postCxt postList
+            makeItem ""
+                >>= loadAndApplyTemplate "templates/searchResult.html" cxt
+                >>= loadAndApplyTemplate "templates/default.html" cxt
+
     create ["sitemap.xml"] $ do
         route idRoute
         compile $ do
@@ -160,7 +186,6 @@ main = hakyll $ do
             let template = readTemplate $ "<url><loc>" ++ rootAddress ++ "$url$</loc></url>"
             fmap (Item "sitemap.xml") (applyJoinTemplateList "\n" template defaultContext posts)
                 >>= loadAndApplyTemplate "templates/sitemap.xml" defaultContext
-
 
     create ["atom.xml"] $ do
         route idRoute
@@ -186,6 +211,7 @@ nPages = M.size . paginatePages
 
 globalContext :: Tags -> [Item String] -> Context String
 globalContext tags pl =
+    constField "inheader" "" <>
     constField "subbrand" "" <>
     listField "postList" defaultContext (take recentCount <$> recentFirst pl) <>
     field "taglist" (const $ renderTags tagFunc concat tags) <>
