@@ -7,28 +7,85 @@ footer {
   border-top: 1px solid #e5e5e5;
 }
 
-.post img {
-  max-width: 100%
+/*
+ * .column-container
+ *   .sidemenu-column
+ *     .blob
+ *   .posts-column
+ *     .posts / .single-post
+ *       .post
+ *         .page-header
+ *         .post-body
+ * */
+
+/* --------------------------------------------- */
+
+.column-container {
+  padding-top: 10px
 }
 
-.caption:before {
-  content: "図:";
+/* --------------------------------------------- */
+
+.sidemenu-column .blob {
+  margin-bottom: 30px;
 }
 
-.caption {
-  color: #777;
+/* --------------------------------------------- */
+
+.post {
+  margin-bottom: 20px;
+  padding: 0 10px;
 }
 
-.page-header h1 a {
+/* --------------------------------------------- */
+
+.post .page-header .post-date {
+  font-style: italic;
+  color: #999;
+}
+
+.post .page-header {
+  margin-top: 0px
+}
+
+.post .page-header h1 {
+  margin-top: 0px;
+}
+
+.post .page-header h1 a {
   color: black;
 }
+
+/* --------------------------------------------- */
 
 .post-body {
   line-height: 160%;
 }
 
+.single-post .post-body {
+  line-height: 160%;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.post-body img {
+  max-width: 100%
+}
+
+.post-body pre code{
+  white-space: pre;
+}
+
+.post-body .caption:before {
+  content: "図:";
+}
+
+.post-body .caption {
+  color: #777;
+}
+
 .post-body h1 {
-  margin-top: 50px;
   font-size: 150%;
 }
 
@@ -37,31 +94,20 @@ footer {
   font-size: 130%;
 }
 
-#side-menu .blob:first-child {
-  margin-top: 60px;
-}
+/* --------------------------------------------- */
 
-#side-menu .blob {
-  margin-bottom: 30px;
-}
-
-.post-date {
-  font-style: italic;
-  color: #999;
-}
-
-#youjava {
+.sidemenu-column .youjava {
   margin-bottom: 20px;
 }
 
-#youjava p {
+.sidemenu-column .youjava p {
   text-transform: uppercase;
   color: #646464;
   text-align: center;
   font: Helvetica,Arial,sans-selif;
 }
 
-#youjava a {
+.sidemenu-column .youjava a {
   text-decoration: none;
   font-size: 10px;
   text-align: center;
