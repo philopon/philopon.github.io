@@ -1,17 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>About:Blank - Hakyllでgithub.ioにブログ作った</title>
+    <title>About:Blank - search</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/css/default.css" />
     <link rel="stylesheet" type="text/css" href="/css/highlight.css" />
     <link rel="alternate" type="application/atom+xml" href="/atom.xml" />
     <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
     <script type="text/javascript" src="/js/default.js"></script>
-    
+    <script type='text/javascript' src='/js/purl.js' ></script>
+<script type='text/javascript' src='/js/ajax.js' ></script>
+<script type='text/javascript' src='/js/search.js' ></script>
+
     <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -29,7 +33,7 @@ ga('send', 'pageview');
         <div class="navbar-header">
           <a href="/" class="navbar-brand">About:Blank</a>
         </div>
-        <p class="navbar-text navbar-subbrand"></p>
+        <p class="navbar-text navbar-subbrand">Search: </p>
 
         <form class="navbar-form navbar-right search-post">
           <input type="text" class="form-control" placeholder="単語検索" />
@@ -43,62 +47,8 @@ ga('send', 'pageview');
     <div class="container">
       <div class="column-container row">
         <div class="posts-column col-sm-9 col-md-8">
-          <div class="single-post">
-  <div class="post">
-    <div class="page-header">
-  <h1><a href="/posts/2014/create_blog.html">Hakyllでgithub.ioにブログ作った</a></h1>
-  <div class="post-date">Posted on 2014-02-25</div>
-  <div class="clearfix">
-    <div class="pull-left"><a href="/tags/hakyll/1.html">hakyll</a>, <a href="/tags/haskell/1.html">haskell</a></div>
-    <a class="pull-right" href="http://github.com/philopon/philopon.github.io/blob/sources/posts/2014/create_blog/post.md">source</a>
-  </div>
+          <div class="posts">
 </div>
-
-
-    <div class="post-body">
-      <p>テスト投稿を兼ねてこの記事を書いている時の操作について書いておきます。</p>
-<ol style="list-style-type: decimal">
-<li>Hakyllに<code>watch</code>引数を与えて起動する。</li>
-<li>おもむろに記事を書く。<code>localhost:8000</code>でプレビューできる。</li>
-<li>完成したら<a href="https://github.com/philopon/philopon.github.io/blob/sources/deploy.sh">デプロイスクリプト</a>を実行して記事&amp;元のmarkdownファイルをデプロイ。</li>
-</ol>
-<p>デプロイスクリプトでは、</p>
-<ol style="list-style-type: decimal">
-<li><code>site.hs rebuild</code>で再ビルド</li>
-<li><code>_site</code>から<code>rsync</code>で<code>deploy</code>ディレクトリにコピー</li>
-<li><code>deploy</code>ディレクトリ(remote originをphilopon.github.ioに、branchをmasterにしてる)に移動して全ファイルをgithub pagesのmasterブランチにpush</li>
-<li>ルートディレクトリに戻って<code>posts</code>以下をsourcesブランチにpush</li>
-</ol>
-<p>みたいな操作をしております。<code>set -e</code>してるので3で新しいファイルが無かったりするとそこで止まってくれます。<code>set -e</code>便利。</p>
-    </div>
-    <div id="disqus_thread"></div>
-    <script type="text/javascript">
-/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-    var disqus_shortname = 'philopon'; // required: replace example with your forum shortname
-
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-     })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-  </div>
-</div>
-
-  <ul class="pager">
-    
-    <li class="previous"><a href="/posts/2014/runsandbox.html">← Newer</a></li>
-    
-
-    
-    <li class="next disabled"><a>Older →</a></li>
-    
-  </ul>
 
         </div>
         <div class="sidemenu-column col-sm-3 col-md-4">
