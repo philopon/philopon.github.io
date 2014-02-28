@@ -14,6 +14,9 @@ import qualified Text.HTML.TagSoup as TS
 import qualified Text.Highlighting.Kate as Kate
 --------------------------------------------------------------------------------
 
+rootAddress :: String
+rootAddress = "http://philopon.github.io"
+
 postParPage :: Int
 postParPage = 5
 
@@ -32,7 +35,7 @@ feedConfig = FeedConfiguration
     , feedDescription = ""
     , feedAuthorName  = "philopon"
     , feedAuthorEmail = ""
-    , feedRoot        = "http://philopon.github.io/"
+    , feedRoot        = rootAddress
     }
 
 main :: IO ()
@@ -143,6 +146,15 @@ main = hakyll $ do
                 makeItem ""
                     >>= loadAndApplyTemplate "templates/multipost.html" tagsCxt
                     >>= loadAndApplyTemplate "templates/default.html"   tagsCxt
+
+    create ["sitemap.xml"] $ do
+        route idRoute
+        compile $ do
+            posts <- recentFirst =<< loadAllSnapshots (postsPattern .&&. hasNoVersion) "raw_post" :: Compiler [Item String]
+            let template = readTemplate $ "<url><loc>" ++ rootAddress ++ "$url$</loc></url>"
+            fmap (Item "sitemap.xml") (applyJoinTemplateList "\n" template defaultContext posts)
+                >>= loadAndApplyTemplate "templates/sitemap.xml" defaultContext
+
 
     create ["atom.xml"] $ do
         route idRoute
