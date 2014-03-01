@@ -31,5 +31,6 @@ executable githubio
                      , unordered-containers >= 0.2
                      , aeson >= 0.7
                      , text  >= 1.0
+                     , process >= 1.1
   -- hs-source-dirs:      
   default-language:    Haskell2010

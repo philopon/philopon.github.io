@@ -2,7 +2,10 @@
 {-# LANGUAGE OverloadedStrings, NoMonomorphismRestriction #-}
 import           Control.Applicative
 import           Control.Monad
+import           Control.Exception
 import           System.FilePath.Posix
+import           System.Process
+import           System.Exit
 import           Hakyll
 
 import qualified Data.Map as M
@@ -13,6 +16,7 @@ import           Data.Monoid (mempty, (<>))
 
 import qualified Text.HTML.TagSoup as TS
 import qualified Text.Highlighting.Kate as Kate
+
 import           SearchIndex
 --------------------------------------------------------------------------------
 
@@ -34,13 +38,6 @@ dateFormat = "%Y-%m-%d"
 descriptionLength :: Int
 descriptionLength = 100
 
-searchScripts :: String
-searchScripts = unlines
-    [ "<script type='text/javascript' src='/js/purl.js' ></script>"
-    , "<script type='text/javascript' src='/js/ajax.js' ></script>"
-    , "<script type='text/javascript' src='/js/search.js' ></script>"
-    ]
-
 feedConfig :: FeedConfiguration
 feedConfig = FeedConfiguration
     { feedTitle       = "About:Blank"
@@ -53,11 +50,22 @@ feedConfig = FeedConfiguration
 postRoute :: Identifier -> FilePath
 postRoute = ((<.> "html"). takeDirectory . toFilePath)
 
+minifyJs :: Item String -> Compiler (Item String)
+minifyJs = processCompiler "./node_modules/uglify-js/bin/uglifyjs" ["--unsafe", "-m", "-mf"]
+
 main :: IO ()
 main = hakyll $ do
-    match ("images/*" .||. "fonts/*" .||. "js/*" .||. "css/*.min.css") $ do
+    match ("images/*" .||. "fonts/*" .||. "css/*.min.css") $ do
         route   idRoute
         compile copyFileCompiler
+
+    match ("js/*/*" .&&. complement "js/*/*.min.js") $ do
+        route . customRoute $ ("js" </>) . takeFileName . toFilePath
+        compile $ getResourceString >>= minifyJs
+
+    match "js/*/*.min.js" $ do
+        route . customRoute $ ("js" </>) . (<.> "js") . dropExtensions . takeFileName . toFilePath
+        compile getResourceString
 
     match ("css/*" .&&. complement "css/*.min.css") $ do
         route   idRoute
@@ -171,8 +179,11 @@ main = hakyll $ do
         route idRoute
         compile $ do
             postList <- loadAll (postsPattern .&&. hasVersion "post list") :: Compiler [Item String]
-            let cxt = constField "inheader" searchScripts <>
-                      constField "subbrand" "Search: "    <>
+            let template = readTemplate "<script type=\"text/javascript\" src=\"$url$\"></script>"
+            scripts  <- loadAll "js/search/*" >>= applyJoinTemplateList "\n" template defaultContext
+
+            let cxt = constField "inheader" scripts    <>
+                      constField "subbrand" "Search: " <>
                       postCxt postList
             makeItem ""
                 >>= loadAndApplyTemplate "templates/searchResult.html" cxt
@@ -290,6 +301,13 @@ dropAfterMore item =
 strip :: String -> String
 strip = f . f
   where f = dropWhile (`elem` (" \t" :: String)) . reverse
+
+processCompiler :: FilePath -> [String] -> Item String -> Compiler (Item String)
+processCompiler prog opts (Item idnt str) = do
+    r <- unsafeCompiler $ readProcessWithExitCode prog opts str
+    case r of
+        (ExitSuccess  , o, _) -> return $ Item idnt o
+        (ExitFailure c, _, e) -> fail $ "processCompiler: " ++ prog ++ ": " ++ e ++ "(exit code: " ++ show c ++ ")"
 
 --------------------------------------------------------------------------------
 

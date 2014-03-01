@@ -4,6 +4,10 @@ set -e
 
 cd `dirname $0`
 
+if [ ! -e ./node_modules/uglify-js/bin/uglifyjs ]; then
+  npm install uglify-js
+fi
+
 cabal build --ghc-option=-L/usr/local/lib
 ./githubio rebuild
 rsync -av --delete --exclude=.git _site/ deploy
