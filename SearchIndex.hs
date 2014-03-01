@@ -15,9 +15,9 @@ import qualified Data.Map.Lazy as M
 isNoun :: Node T.Text -> Bool
 isNoun = ("\21517\35422," `T.isPrefixOf`) . nodeFeature
 
-morpheme :: [String] -> Item String -> IO (Item (S.Set T.Text))
-morpheme opts (Item idnt str) =
-    fmap (Item idnt . S.fromList . map (T.toLower . nodeSurface) . filter isNoun) $
+morpheme :: [String] -> String -> IO (S.Set T.Text)
+morpheme opts str =
+    fmap (S.fromList . map nodeSurface . filter isNoun) $
         new opts >>= flip parseToNodes (T.pack str)
 
 reverseIndex :: [Item (S.Set T.Text)] -> H.HashMap T.Text [Int]
@@ -28,15 +28,19 @@ reverseIndex items =
 
 searchIndex :: Context String -> Int -> [String] -> [Item String] -> Compiler L.ByteString
 searchIndex cxt desclen opts items = do
-    hm   <- unsafeCompiler $ reverseIndex <$> mapM (morpheme opts) items
+    hm   <- fmap reverseIndex $ forM items $ \(Item idnt str) -> do
+        title <- getMetadataField' idnt "title" 
+        tags  <- getMetadataField' idnt "tags" 
+        fmap (Item idnt) $ unsafeCompiler $ morpheme opts (title ++ ' ':tags ++ ' ': str)
     urls <- forM items $ \item -> do
-        StringField date <- unContext cxt "date" item
-        StringField url  <- unContext cxt "url" item
+        let func f n = do
+                StringField v <- unContext cxt n item
+                return $ f . M.insert n v
+        ffunc <- foldM func id ["date", "url", "tags"]
 
-        M.insert "date" date . M.insert "url" url .
-            M.insert "description" (take desclen $ itemBody item) <$>
+        ffunc . M.insert "description" (take desclen $ itemBody item) <$>
             getMetadata (itemIdentifier item)
     return . Json.encode . Json.object $ 
-        [ "pages" Json..= urls
+        [ "posts" Json..= urls
         , "dict"  Json..= hm
         ]
