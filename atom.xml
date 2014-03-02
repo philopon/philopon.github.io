@@ -17,7 +17,7 @@
     <updated>2014-03-02T13:39:08Z</updated>
     <summary type="html"><![CDATA[<p>表題の通りです。 sandbox中のパッケージ数を表示させてます。</p>
 <div class="figure">
-<img src="ss.png" alt="cabal-sandboxのパッケージ数を表示" /><p class="caption">cabal-sandboxのパッケージ数を表示</p>
+<a href="ss.png"><img src="ss.png" alt="cabal-sandboxのパッケージ数を表示"></a></img><p class="caption">cabal-sandboxのパッケージ数を表示</p>
 </div>
 <p>ついでにsandbox中でsandbox外のパッケージを使用したい事はまずないので、(やや過激ですが)<code>ghc-pkg</code>,<code>runhaskell</code>,<code>runghc</code>,<code>ghc</code>,<code>ghci</code>をsandbox中で実行した時はsandbox内のパッケージを使用する様にしてみました。便利。</p>
 <!-- more -->
