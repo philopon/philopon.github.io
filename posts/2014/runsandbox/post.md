@@ -4,6 +4,10 @@ date:  2014-02-26T00:53:15Z
 tags:  haskell, cabal
 ---
 
+<div class="alert alert-danger">
+  [zshでcabal-sandboxの状態を表示する](/posts/2014/cabal-sandbox-zsh.html)を見た方が良いかも知れません。
+</div>
+
 概要
 ====
 
