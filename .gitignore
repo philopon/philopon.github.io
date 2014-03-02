@@ -5,3 +5,4 @@ dist
 *.swp
 cabal.sandbox.config
 deploy
+node_modules/

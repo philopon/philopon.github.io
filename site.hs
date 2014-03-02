@@ -2,7 +2,6 @@
 {-# LANGUAGE OverloadedStrings, NoMonomorphismRestriction #-}
 import           Control.Applicative
 import           Control.Monad
-import           Control.Exception
 import           System.FilePath.Posix
 import           System.Process
 import           System.Exit
@@ -107,7 +106,7 @@ main = hakyll $ do
         compile $ do 
             postList <- loadAll (postsPattern .&&. hasVersion "post list") :: Compiler [Item String]
 
-            items <- pandocCompiler
+            items <- postCompiler
 
             void $ saveSnapshot "plain" (fmap stripTags items)
 
@@ -250,7 +249,7 @@ postLink item = do
     return $ case mbr of
         Nothing -> item
         Just r  -> fmap (withUrls $ process r) item
-  where 
+  where
     process _ [] = []
     process r url@(h:_)
         | h == '#'                               = "/" </> r ++ url
@@ -280,10 +279,10 @@ postCompiler =
   where addTableClass tag | TS.isTagOpenName "table" tag = addClass "table" tag
                           | otherwise                    = tag
         addImageLink i (a, r)
-            | TS.isTagOpenName   "a" i      = (True, i:r)
-            | TS.isTagCloseName  "a" i      = (False, i:r)
-            | TS.isTagOpenName "img" i && a = (False, addLink i ++ r)
-            | otherwise                     = (a, i:r)
+            | TS.isTagOpenName   "a" i          = (True, i:r)
+            | TS.isTagCloseName  "a" i          = (False, i:r)
+            | TS.isTagOpenName "img" i && not a = (False, addLink i ++ r)
+            | otherwise                         = (a, i:r)
         addLink img@(TS.TagOpen _ attr) = case lookup "src" attr of
             Nothing  -> [img]
             Just src -> [TS.TagOpen "a" [("href", src)], img, TS.TagClose "a"]

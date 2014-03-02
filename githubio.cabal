@@ -32,5 +32,6 @@ executable githubio
                      , aeson >= 0.7
                      , text  >= 1.0
                      , process >= 1.1
+  extra-lib-dirs:      /usr/local/lib
   -- hs-source-dirs:      
   default-language:    Haskell2010
