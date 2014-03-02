@@ -88,12 +88,11 @@ footer {
   color: #777;
 }
 
-.post-body h1 {
+.post-body h2 {
   font-size: 150%;
 }
 
-.post-body h2 {
-  margin-top: 20px;
+.post-body h3 {
   font-size: 130%;
 }
 

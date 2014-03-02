@@ -272,7 +272,7 @@ addClass _ tag = tag
 
 postCompiler :: Compiler (Item String)
 postCompiler = 
-    fmap ( renderTags'
+    fmap ( demoteHeaders . renderTags'
          . concat . snd . mapAccumL addImageLink False
          . map addTableClass . TS.parseTags) <$>
     pandocCompiler
