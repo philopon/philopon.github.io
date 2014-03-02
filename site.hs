@@ -10,7 +10,7 @@ import           Hakyll
 import qualified Data.Map as M
 import qualified Data.Set as S
 import           Data.Char (toLower)
-import           Data.List(unfoldr,partition)
+import           Data.List(unfoldr,partition,mapAccumL)
 import           Data.Monoid (mempty, (<>))
 
 import qualified Text.HTML.TagSoup as TS
@@ -273,16 +273,16 @@ addClass _ tag = tag
 postCompiler :: Compiler (Item String)
 postCompiler = 
     fmap ( renderTags'
-         . snd . foldr addImageLink (False, [])
+         . concat . snd . mapAccumL addImageLink False
          . map addTableClass . TS.parseTags) <$>
     pandocCompiler
   where addTableClass tag | TS.isTagOpenName "table" tag = addClass "table" tag
                           | otherwise                    = tag
-        addImageLink i (a, r)
-            | TS.isTagOpenName   "a" i          = (True, i:r)
-            | TS.isTagCloseName  "a" i          = (False, i:r)
-            | TS.isTagOpenName "img" i && not a = (False, addLink i ++ r)
-            | otherwise                         = (a, i:r)
+        addImageLink a i
+            | TS.isTagOpenName   "a" i          = (True,  [i])
+            | TS.isTagCloseName  "a" i          = (False, [i])
+            | TS.isTagOpenName "img" i && not a = (False, addLink i)
+            | otherwise                         = (a, [i])
         addLink img@(TS.TagOpen _ attr) = case lookup "src" attr of
             Nothing  -> [img]
             Just src -> [TS.TagOpen "a" [("href", src)], img, TS.TagClose "a"]
