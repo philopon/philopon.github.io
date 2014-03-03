@@ -16,22 +16,21 @@
 <a href="error.png"><img src="error.png" alt="サンドボックスエラー"></a></img><p class="caption">サンドボックスエラー</p>
 </div>
 <p>と怒られてしまいました。どうやらセキュリティのため、Mac App Store経由でインストールしたアプリからはcask管理ディレクトリ(<code>/opt/homebrew-cask/Caskroom/</code>)にアクセスできない様です。</p>
-<p>$ neko nyan</p>
 <!-- more -->
 
 <p>これはつらい！1passwordだけでなくブラウザまでもcaskで管理できない！と、解決法を調べていたところ、1passwordのサポートサイトに「Mac App Store版の購入の証明をしてくれればAgilebits store版のライセンスを発行するよ！」と書いてあった<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>ので、サポート<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>に連絡してみました。英語があれすぎてあれなのでやりとりの概要だけ載せておきます。</p>
-<h2 id="通目">1通目</h2>
+<h3 id="通目">1通目</h3>
 <p>サンドボックスが邪魔なのでAgilebits store版が使いたい旨、証拠になりそうな物として以下の3ファイルを添付</p>
 <ol style="list-style-type: decimal">
 <li>Mac App Storeの“購入済み”画面のスクリーンショット</li>
 <li>Mac App Store版の動作画面のスクリーンショット</li>
 <li>Mac App Storeで決済時に届いたメール</li>
 </ol>
-<h2 id="返信">返信</h2>
+<h3 id="返信">返信</h3>
 <p>証拠はそれで良いよ、って事と情報登録の為にフルネームを教えてね、との事</p>
-<h2 id="通目-1">2通目</h2>
+<h3 id="通目-1">2通目</h3>
 <p>お礼、フルネーム送信</p>
-<h2 id="返信-1">返信</h2>
+<h3 id="返信-1">返信</h3>
 <p>ライセンスつくったので直ぐにもう一通メール送るよ</p>
 <p>てな感じで2往復、6時間くらいでライセンスを発行してもらえました。</p>
 <p>で、</p>
