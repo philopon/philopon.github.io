@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>About:Blank - hakyll - 1</title>
+    <title>About:Blank - homebrew-cask - 1</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/css/default.css" />
     <link rel="stylesheet" type="text/css" href="/css/highlight.css" />
@@ -30,7 +30,7 @@ ga('send', 'pageview');
         <div class="navbar-header">
           <a href="/" class="navbar-brand">About:Blank</a>
         </div>
-        <p class="navbar-text navbar-subbrand">Tag:hakyll</p>
+        <p class="navbar-text navbar-subbrand">Tag:homebrew-cask</p>
 
         <form class="navbar-form navbar-right search-post">
           <input type="text" class="form-control" placeholder="Search" />
@@ -48,59 +48,24 @@ ga('send', 'pageview');
   
   <div class="post">
     <div class="page-header">
-  <h1><a href="/posts/2014/hakyll_tips.html">Hakyll tips</a></h1>
-  <div class="post-date">Posted on 2014-02-26</div>
+  <h1><a href="/posts/2014/1pasword_license_change.html">1Password(Mac App Store版)でもcaskしたい！</a></h1>
+  <div class="post-date">Posted on 2014-03-03</div>
   <div class="clearfix">
-    <div class="pull-left"><a href="/tags/haskell/1.html">haskell</a>, <a href="/tags/hakyll/1.html">hakyll</a>, <a href="/tags/tips/1.html">tips</a></div>
-    <a class="pull-right" href="http://github.com/philopon/philopon.github.io/blob/sources/posts/2014/hakyll_tips/post.lhs">source</a>
+    <div class="pull-left"><a href="/tags/1password/1.html">1password</a>, <a href="/tags/homebrew/1.html">homebrew</a>, <a href="/tags/homebrew-cask/1.html">homebrew-cask</a></div>
+    <a class="pull-right" href="http://github.com/philopon/philopon.github.io/blob/sources/posts/2014/1pasword_license_change/post.md">source</a>
   </div>
 </div>
 
 
     <div class="post-body">
-      <p>lhs文書のテストも兼ねて、ここを作るときに使ったあれこれを書き出しておきます。随時更新。</p>
-<p>lhsで書いているのでヘッダーの<code>source</code>リンクからダウンロードしてそのまま実行する事が可能です。</p>
-<h2 id="もくじ">もくじ</h2>
-<ul>
-<li><a href="/posts/2014/hakyll_tips.html#ハイライトのcssどうするの">ハイライトのcssどうするの</a></li>
-<li><a href="/posts/2014/hakyll_tips.html#元々minifyされているcssはライセンス書いてるしcomplessしたくない">元々minifyされているcssはライセンス書いてるしcomplessしたくない</a></li>
-<li><a href="/posts/2014/hakyll_tips.html#タグごとのページもpaginateしたい">タグごとのページもpaginateしたい</a></li>
-<li><a href="/posts/2014/hakyll_tips.html#表にはtableクラスを付けないとbootstrapが">表にはtableクラスを付けないとbootstrapが！</a></li>
-</ul>
-<p><a href="/posts/2014/hakyll_tips/$url$" class="readmore">read more</a>
-    </div>
-
-  </div>
-  
-  <div class="post">
-    <div class="page-header">
-  <h1><a href="/posts/2014/create_blog.html">Hakyllでgithub.ioにブログ作った</a></h1>
-  <div class="post-date">Posted on 2014-02-25</div>
-  <div class="clearfix">
-    <div class="pull-left"><a href="/tags/hakyll/1.html">hakyll</a>, <a href="/tags/haskell/1.html">haskell</a></div>
-    <a class="pull-right" href="http://github.com/philopon/philopon.github.io/blob/sources/posts/2014/create_blog/post.md">source</a>
-  </div>
+      <p>homebrew-cask、とても便利ですね！ 管理出来るApplicationは全部homebrew-caskで管理したくなります。</p>
+<p>ところが、ブラウザをcaskで入れ直して1password(Mac App Store版)でパスワードを入力しようとすると、</p>
+<div class="figure">
+<a href="/posts/2014/1pasword_license_change/error.png"><img src="/posts/2014/1pasword_license_change/error.png" alt="サンドボックスエラー"></a></img><p class="caption">サンドボックスエラー</p>
 </div>
-
-
-    <div class="post-body">
-      <p>テスト投稿を兼ねてこの記事を書いている時の操作について書いておきます。</p>
-<ol style="list-style-type: decimal">
-<li>Hakyllに<code>watch</code>引数を与えて起動する。</li>
-<li>おもむろに記事を書く。<code>localhost:8000</code>でプレビューできる。</li>
-<li>完成したら<a href="https://github.com/philopon/philopon.github.io/blob/sources/deploy.sh">デプロイスクリプト</a>を実行して記事&amp;元のmarkdownファイルをデプロイ。</li>
-</ol>
-<p>デプロイスクリプトでは、</p>
-<ol style="list-style-type: decimal">
-<li><code>site.hs rebuild</code>で再ビルド</li>
-<li><code>_site</code>から<code>rsync</code>で<code>deploy</code>ディレクトリにコピー</li>
-<li><code>deploy</code>ディレクトリ(remote originをphilopon.github.ioに、branchをmasterにしてる)に移動して全ファイルをgithub pagesのmasterブランチにpush</li>
-<li>ルートディレクトリに戻って<code>posts</code>以下をsourcesブランチにpush</li>
-</ol>
-<p>みたいな操作をしております。<code>set -e</code>してるので3で新しいファイルが無かったりするとそこで止まってくれます。<code>set -e</code>便利。</p>
-<div class="references">
-
-</div>
+<p>と怒られてしまいました。どうやらセキュリティのため、Mac App Store経由でインストールしたアプリからはcask管理ディレクトリ(<code>/opt/homebrew-cask/Caskroom/</code>)にアクセスできない様です。</p>
+<p>$ neko nyan</p>
+<a href="/posts/2014/1pasword_license_change/$url$" class="readmore">read more</a>
     </div>
 
   </div>

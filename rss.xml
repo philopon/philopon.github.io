@@ -6,8 +6,55 @@
         <description><![CDATA[]]></description>
         <atom:link href="http://philopon.github.io/rss.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sun, 02 Mar 2014 13:39:08 UT</lastBuildDate>
+        <lastBuildDate>Mon, 03 Mar 2014 16:21:23 UT</lastBuildDate>
         <item>
+    <title>1Password(Mac App Store版)でもcaskしたい！</title>
+    <link>http://philopon.github.io/posts/2014/1pasword_license_change.html</link>
+    <description><![CDATA[<p>homebrew-cask、とても便利ですね！ 管理出来るApplicationは全部homebrew-caskで管理したくなります。</p>
+<p>ところが、ブラウザをcaskで入れ直して1password(Mac App Store版)でパスワードを入力しようとすると、</p>
+<div class="figure">
+<a href="error.png"><img src="error.png" alt="サンドボックスエラー"></a></img><p class="caption">サンドボックスエラー</p>
+</div>
+<p>と怒られてしまいました。どうやらセキュリティのため、Mac App Store経由でインストールしたアプリからはcask管理ディレクトリ(<code>/opt/homebrew-cask/Caskroom/</code>)にアクセスできない様です。</p>
+<p>$ neko nyan</p>
+<!-- more -->
+
+<p>これはつらい！1passwordだけでなくブラウザまでもcaskで管理できない！と、解決法を調べていたところ、1passwordのサポートサイトに「Mac App Store版の購入の証明をしてくれればAgilebits store版のライセンスを発行するよ！」と書いてあった<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>ので、サポート<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>に連絡してみました。英語があれすぎてあれなのでやりとりの概要だけ載せておきます。</p>
+<h2 id="通目">1通目</h2>
+<p>サンドボックスが邪魔なのでAgilebits store版が使いたい旨、証拠になりそうな物として以下の3ファイルを添付</p>
+<ol style="list-style-type: decimal">
+<li>Mac App Storeの“購入済み”画面のスクリーンショット</li>
+<li>Mac App Store版の動作画面のスクリーンショット</li>
+<li>Mac App Storeで決済時に届いたメール</li>
+</ol>
+<h2 id="返信">返信</h2>
+<p>証拠はそれで良いよ、って事と情報登録の為にフルネームを教えてね、との事</p>
+<h2 id="通目-1">2通目</h2>
+<p>お礼、フルネーム送信</p>
+<h2 id="返信-1">返信</h2>
+<p>ライセンスつくったので直ぐにもう一通メール送るよ</p>
+<p>てな感じで2往復、6時間くらいでライセンスを発行してもらえました。</p>
+<p>で、</p>
+<pre class="sh"><code>$$ brew cask install onepassword</code></pre>
+<div class="figure">
+<a href="register.png"><img src="register.png" alt="登録完了"></a></img><p class="caption">登録完了</p>
+</div>
+<p>登録できてcaskで管理しているブラウザとの連携も確認できました。</p>
+<p>とても迅速で丁寧に対応していただけたので、Mac Appstore版を購入済みでhomebrew caskユーザーの方は連絡してみれば良いと思います。</p>
+<div class="references">
+
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="http://learn.agilebits.com/1Password4/1p4-sales-faqs.html#can-i-switch-the-license-i-bought-from-agilebits-store-to-mac-app-store-or-the-other-way-around">The fun stuff about 1Password 4’s Sales and Licensing</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p><a href="http://learn.agilebits.com/1Password4/Mac/en/contact-us.html#e-mail">We’re Here to Help!</a><a href="#fnref2">↩</a></p></li>
+</ol>
+</div>]]></description>
+    <pubDate>Mon, 03 Mar 2014 16:21:23 UT</pubDate>
+    <guid>http://philopon.github.io/posts/2014/1pasword_license_change.html</guid>
+</item>
+<item>
     <title>zshでcabal-sandboxの状態を表示する</title>
     <link>http://philopon.github.io/posts/2014/cabal-sandbox-zsh.html</link>
     <description><![CDATA[<p>表題の通りです。 sandbox中のパッケージ数を表示させてます。</p>
@@ -24,7 +71,10 @@
 <dt><a href="https://github.com/philopon/.zsh.d/blob/e7eb4e5540e41655814406087c226905e72c4aa8/haskell.zsh#L17-L32">prompt.zsh</a></dt>
 <dd>プロンプトの設定
 </dd>
-</dl>]]></description>
+</dl>
+<div class="references">
+
+</div>]]></description>
     <pubDate>Sun, 02 Mar 2014 13:39:08 UT</pubDate>
     <guid>http://philopon.github.io/posts/2014/cabal-sandbox-zsh.html</guid>
 </item>
@@ -105,7 +155,10 @@
 <span class="ot">&gt; posts ::</span> <span class="dt">Rules</span> ()
 <span class="ot">&gt;</span> posts <span class="fu">=</span> match <span class="st">&quot;posts/**.md&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
 <span class="ot">&gt;</span>     route <span class="fu">$</span> setExtension <span class="st">&quot;html&quot;</span>
-<span class="ot">&gt;</span>     compile postCompiler</code></pre>]]></description>
+<span class="ot">&gt;</span>     compile postCompiler</code></pre>
+<div class="references">
+
+</div>]]></description>
     <pubDate>Wed, 26 Feb 2014 16:10:05 UT</pubDate>
     <guid>http://philopon.github.io/posts/2014/hakyll_tips.html</guid>
 </item>
@@ -151,7 +204,10 @@ Removing _site...
 Removing _cache...
 Removing _cache/tmp...
 runsandbox site.hs clean  1.59s user 0.27s system 98% cpu 1.894 tota</code></pre>
-<p>ソースは<a href="https://github.com/philopon/runsandbox">こちら</a></p>]]></description>
+<p>ソースは<a href="https://github.com/philopon/runsandbox">こちら</a></p>
+<div class="references">
+
+</div>]]></description>
     <pubDate>Wed, 26 Feb 2014 00:53:15 UT</pubDate>
     <guid>http://philopon.github.io/posts/2014/runsandbox.html</guid>
 </item>
@@ -171,7 +227,10 @@ runsandbox site.hs clean  1.59s user 0.27s system 98% cpu 1.894 tota</code></pre
 <li><code>deploy</code>ディレクトリ(remote originをphilopon.github.ioに、branchをmasterにしてる)に移動して全ファイルをgithub pagesのmasterブランチにpush</li>
 <li>ルートディレクトリに戻って<code>posts</code>以下をsourcesブランチにpush</li>
 </ol>
-<p>みたいな操作をしております。<code>set -e</code>してるので3で新しいファイルが無かったりするとそこで止まってくれます。<code>set -e</code>便利。</p>]]></description>
+<p>みたいな操作をしております。<code>set -e</code>してるので3で新しいファイルが無かったりするとそこで止まってくれます。<code>set -e</code>便利。</p>
+<div class="references">
+
+</div>]]></description>
     <pubDate>Tue, 25 Feb 2014 23:50:52 UT</pubDate>
     <guid>http://philopon.github.io/posts/2014/create_blog.html</guid>
 </item>
