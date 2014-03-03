@@ -278,7 +278,7 @@ addClass cls (TS.TagOpen name attr) = case partition ((== "class") . fst) attr o
 addClass _ tag = tag
 
 postCompiler :: Compiler (Item String)
-postCompiler = do
+postCompiler = cached "site.postCompiler" $ do
     csl <- load citationStyle :: Compiler (Item CSL)
     global <- load "bibliography.bib" :: Compiler (Item Bib.Bib)
     pat    <- fromGlob . (</> "bibliography.*") . takeDirectory . toFilePath <$> getUnderlying
@@ -305,13 +305,15 @@ postCompiler = do
         addLink _ = error "addLink: only TagOpen expected."
 
 dropAfterMore :: Item String -> Compiler (Item String)
-dropAfterMore item =
-    return $ renderTags'. process. TS.parseTags <$> item
-  where process []                                      = []
-        process (TS.TagComment c:_) | strip c == "more" = [ TS.TagOpen "a" [("href", "$url$"), ("class", "readmore")]
+dropAfterMore item = do
+    StringField url <- unContext (urlField "url") "url" item
+    return $ renderTags'. (process url). TS.parseTags <$> item
+  where
+    process url []                                      = []
+    process url (TS.TagComment c:_) | strip c == "more" = [ TS.TagOpen "a" [("href", url), ("class", "readmore")]
                                                           , TS.TagText "read more"
                                                           , TS.TagClose "a"]
-        process (o:ts)                                  = o:process ts
+    process url (o:ts)                                  = o:process url ts
 
 strip :: String -> String
 strip = f . f
