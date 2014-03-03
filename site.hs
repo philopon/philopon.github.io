@@ -11,12 +11,13 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import           Data.Char (toLower)
 import           Data.List(unfoldr,partition,mapAccumL)
-import           Data.Monoid (mempty, (<>))
+import           Data.Monoid (Monoid, mempty, mconcat, (<>))
 
 import qualified Text.HTML.TagSoup as TS
 import qualified Text.Highlighting.Kate as Kate
 
 import           SearchIndex
+import qualified Bib
 --------------------------------------------------------------------------------
 
 rootAddress :: String
@@ -49,6 +50,9 @@ feedConfig = FeedConfiguration
 postRoute :: Identifier -> FilePath
 postRoute = ((<.> "html"). takeDirectory . toFilePath)
 
+citationStyle :: Identifier
+citationStyle = "citation-styles/nature.csl"
+
 minifyJs :: Item String -> Compiler (Item String)
 minifyJs = processCompiler "./node_modules/uglify-js/bin/uglifyjs" ["--unsafe", "-m", "-mf"]
 
@@ -69,6 +73,9 @@ main = hakyll $ do
     match ("css/*" .&&. complement "css/*.min.css") $ do
         route   idRoute
         compile compressCssCompiler
+
+    match (fromList [citationStyle]) $ compile cslCompiler
+    match ("bibliography.*" .||. "posts/**/bibliography.*") $ compile Bib.compiler
 
     create ["css/highlight.css"] $ do
         route idRoute
@@ -271,11 +278,20 @@ addClass cls (TS.TagOpen name attr) = case partition ((== "class") . fst) attr o
 addClass _ tag = tag
 
 postCompiler :: Compiler (Item String)
-postCompiler = 
+postCompiler = do
+    csl <- load citationStyle :: Compiler (Item CSL)
+    global <- load "bibliography.bib" :: Compiler (Item Bib.Bib)
+    pat    <- fromGlob . (</> "bibliography.*") . takeDirectory . toFilePath <$> getUnderlying
+    local  <- mconcat . map itemBody <$> loadAll (pat .&&. hasNoVersion)
+    let bib = Item "" $ local <> itemBody global
+
     fmap ( demoteHeaders . renderTags'
          . concat . snd . mapAccumL addImageLink False
          . map addTableClass . TS.parseTags) <$>
-    pandocCompiler
+         ( getResourceBody
+            >>= readPandocBiblio defaultHakyllReaderOptions csl (Bib.cast bib)
+            >>= return . writePandoc)
+
   where addTableClass tag | TS.isTagOpenName "table" tag = addClass "table" tag
                           | otherwise                    = tag
         addImageLink a i
@@ -290,7 +306,7 @@ postCompiler =
 
 dropAfterMore :: Item String -> Compiler (Item String)
 dropAfterMore item =
-    applyAsTemplate defaultContext $ renderTags'. process. TS.parseTags <$> item
+    return $ renderTags'. process. TS.parseTags <$> item
   where process []                                      = []
         process (TS.TagComment c:_) | strip c == "more" = [ TS.TagOpen "a" [("href", "$url$"), ("class", "readmore")]
                                                           , TS.TagText "read more"
