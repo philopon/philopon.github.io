@@ -14,6 +14,7 @@ lhsで書いているのでヘッダーの`source`リンクからダウンロー
 * [元々minifyされているcssはライセンス書いてるしcomplessしたくない](#元々minifyされているcssはライセンス書いてるしcomplessしたくない)
 * [タグごとのページもpaginateしたい](#タグごとのページもpaginateしたい)
 * [表にはtableクラスを付けないとbootstrapが！](#表にはtableクラスを付けないとbootstrapが)
+* [bibtexで引用したい](http://localhost:8000/posts/2014/03/hakyll_cite.html)
 
  <!-- more -->
 
