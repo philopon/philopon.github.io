@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>http://philopon.github.io/posts/2014/1pasword_license_change.html</loc></url>
+<url><loc>http://philopon.github.io/posts/2014/03/hakyll_cite.html</loc></url>
+<url><loc>http://philopon.github.io/posts/2014/03/1pasword_license_change.html</loc></url>
 <url><loc>http://philopon.github.io/posts/2014/cabal-sandbox-zsh.html</loc></url>
 <url><loc>http://philopon.github.io/posts/2014/hakyll_tips.html</loc></url>
-<url><loc>http://philopon.github.io/posts/2014/runsandbox.html</loc></url>
-<url><loc>http://philopon.github.io/posts/2014/create_blog.html</loc></url>
+<url><loc>http://philopon.github.io/posts/2014/02/runsandbox.html</loc></url>
+<url><loc>http://philopon.github.io/posts/2014/02/create_blog.html</loc></url>
 </urlset> 

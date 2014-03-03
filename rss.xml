@@ -6,10 +6,76 @@
         <description><![CDATA[]]></description>
         <atom:link href="http://philopon.github.io/rss.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Mon, 03 Mar 2014 16:21:23 UT</lastBuildDate>
+        <lastBuildDate>Tue, 04 Mar 2014 01:33:19 UT</lastBuildDate>
         <item>
+    <title>Haskyllで引用機能を使う</title>
+    <link>http://philopon.github.io/posts/2014/03/hakyll_cite.html</link>
+    <description><![CDATA[<h2 id="結論">結論</h2>
+<p>やめておきましょう。footnote使いましょう。</p>
+<p>…だけではアレなので、供養を兼ねて一応使い方を書いておきます。</p>
+<!-- more -->
+
+<h3 id="cslファイルを取得する">CSLファイルを取得する</h3>
+<p>HakyllでHTMLへの変換に使用しているpandocでは、Citation Style Language(CSL)を使って引用文献の表示をカスタマイズできます。 <a href="https://github.com/citation-style-language/styles">citation-style-language/styles</a>にしこたまあるので、適当な物をコピーするなり、cloneするなり、submoduleにするなりしましょう。</p>
+<h3 id="ルールを追加する">ルールを追加する</h3>
+<p><code>templateCompiler</code>と同じように適当にルールを追加します。</p>
+<table class="table sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell">main <span class="fu">=</span> hakyll <span class="fu">$</span> <span class="kw">do</span>
+    match <span class="st">&quot;style.csl&quot;</span>        <span class="fu">$</span> cslCompiler
+    match <span class="st">&quot;bibliography.bib&quot;</span> <span class="fu">$</span> biblioCompiler</code></pre></td></tr></table>
+<h3 id="コンパイラを書き換える">コンパイラを書き換える</h3>
+<p><code>pandocCompiler</code>のソースを参考に、<code>readPandocBiblio</code>を使って適当にコンパイラを書き換えましょう。</p>
+<table class="table sourceCode haskell numberLines" startFrom="4"><tr class="sourceCode"><td class="lineNumbers"><pre>4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell">     match <span class="st">&quot;posts/*.md&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+        route idRoute
+        compile <span class="fu">$</span> <span class="kw">do</span>
+            csl <span class="ot">&lt;-</span> load <span class="st">&quot;style.csl&quot;</span>
+            bib <span class="ot">&lt;-</span> load <span class="st">&quot;bibliography.bib&quot;</span>
+            cached <span class="st">&quot;myPostCompiler&quot;</span> <span class="fu">$</span> getResourceBody
+                <span class="fu">&gt;&gt;=</span> readPandocBiblio defaultHakyllReaderOptions csl bib
+                <span class="fu">&gt;&gt;=</span> return <span class="fu">.</span> writePandoc</code></pre></td></tr></table>
+<h3 id="完成.ではなく">完成！….ではなく</h3>
+<p>これでよいならまだ「やめておきましょう」とまでは言わないのですが、このままだと<code>Reference</code>を再読込する時にread関数でコケます<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>。</p>
+<p>これは<code>Biblio</code>の<code>Binary</code>インスタンスが<code>Reference</code>のshow/readを使用して実装されており<span class="citation"><sup>1</sup></span>、<code>Reference</code>のread/showが逆関数になっていないためです<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>。</p>
+<p>そこで、取り敢えずshow/readではなくAesonインスタンスを使ってこれを回避します。</p>
+<h3 id="回避">回避</h3>
+<p><a href="https://github.com/philopon/philopon.github.io/blob/sources/Bib.hs">Bib.hs</a> これをプロジェクトルートにでも置いて<code class="sourceCode haskell"><span class="kw">import qualified</span> <span class="dt">Bib</span></code>しましょう。 趣味で<code>Monoid</code>インスタンスも足してますが、本筋は<code>Aeson</code>を使うようにした以外は変わりません。</p>
+<p>で、<code>Biblio</code>の部分と、</p>
+<table class="table sourceCode haskell numberLines" startFrom="3"><tr class="sourceCode"><td class="lineNumbers"><pre>3
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell">     match <span class="st">&quot;bibliography.bib&quot;</span> <span class="fu">$</span> Bib.compiler</code></pre></td></tr></table>
+<p><code>compile</code>の部分を書き換えましょう。</p>
+<table class="table sourceCode haskell numberLines" startFrom="10"><tr class="sourceCode"><td class="lineNumbers"><pre>10
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell">                <span class="fu">&gt;&gt;=</span> readPandocBiblio defaultHakyllReaderOptions csl (Bib.cast bib)</code></pre></td></tr></table>
+<h3 id="完成">完成！</h3>
+<p>これだけ汚く回避してもハイパーリンク張れないのが(私にとっては)致命的なのでfootnote使った方が幸せでは、って感じます。</p>
+<p>以下に引用のサンプルを付けておきます。</p>
+<div class="references">
+<h2>参考</h2>
+<p>1.hackage <em>et al.</em> src/Hakyll/Web/Pandoc/Biblio.hs. at &lt;<a href="http://hackage.haskell.org/package/hakyll-4.4.3.2/docs/src/Hakyll-Web-Pandoc-Biblio.html#line-66">http://hackage.haskell.org/package/hakyll-4.4.3.2/docs/src/Hakyll-Web-Pandoc-Biblio.html#line-66</a>&gt;</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>2回目以降のbuildとか、watch中とか。<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>毎回再コンパイルするなら、このまま使えます。<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>どこが腐っているかの判断は各自にお任せします。<a href="#fnref3">↩</a></p></li>
+</ol>
+</div>]]></description>
+    <pubDate>Tue, 04 Mar 2014 01:33:19 UT</pubDate>
+    <guid>http://philopon.github.io/posts/2014/03/hakyll_cite.html</guid>
+</item>
+<item>
     <title>1Password(Mac App Store版)でもcaskしたい！</title>
-    <link>http://philopon.github.io/posts/2014/1pasword_license_change.html</link>
+    <link>http://philopon.github.io/posts/2014/03/1pasword_license_change.html</link>
     <description><![CDATA[<p>homebrew-cask、とても便利ですね！ 管理出来るApplicationは全部homebrew-caskで管理したくなります。</p>
 <p>ところが、ブラウザをcaskで入れ直して1password(Mac App Store版)でパスワードを入力しようとすると、</p>
 <div class="figure">
@@ -51,7 +117,7 @@
 </ol>
 </div>]]></description>
     <pubDate>Mon, 03 Mar 2014 16:21:23 UT</pubDate>
-    <guid>http://philopon.github.io/posts/2014/1pasword_license_change.html</guid>
+    <guid>http://philopon.github.io/posts/2014/03/1pasword_license_change.html</guid>
 </item>
 <item>
     <title>zshでcabal-sandboxの状態を表示する</title>
@@ -88,6 +154,7 @@
 <li><a href="#元々minifyされているcssはライセンス書いてるしcomplessしたくない">元々minifyされているcssはライセンス書いてるしcomplessしたくない</a></li>
 <li><a href="#タグごとのページもpaginateしたい">タグごとのページもpaginateしたい</a></li>
 <li><a href="#表にはtableクラスを付けないとbootstrapが">表にはtableクラスを付けないとbootstrapが！</a></li>
+<li><a href="http://localhost:8000/posts/2014/03/hakyll_cite.html">bibtexで引用したい</a></li>
 </ul>
 <p><!-- more --></p>
 <pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="ot">{-#LANGUAGE OverloadedStrings #-}</span>
@@ -163,7 +230,7 @@
 </item>
 <item>
     <title>runsandbox作った</title>
-    <link>http://philopon.github.io/posts/2014/runsandbox.html</link>
+    <link>http://philopon.github.io/posts/2014/02/runsandbox.html</link>
     <description><![CDATA[<div class="alert alert-danger">
 <a href="/posts/2014/cabal-sandbox-zsh.html">zshでcabal-sandboxの状態を表示する</a>を見た方が良いかも知れません。
 </div>
@@ -208,11 +275,11 @@ runsandbox site.hs clean  1.59s user 0.27s system 98% cpu 1.894 tota</code></pre
 
 </div>]]></description>
     <pubDate>Wed, 26 Feb 2014 00:53:15 UT</pubDate>
-    <guid>http://philopon.github.io/posts/2014/runsandbox.html</guid>
+    <guid>http://philopon.github.io/posts/2014/02/runsandbox.html</guid>
 </item>
 <item>
     <title>Hakyllでgithub.ioにブログ作った</title>
-    <link>http://philopon.github.io/posts/2014/create_blog.html</link>
+    <link>http://philopon.github.io/posts/2014/02/create_blog.html</link>
     <description><![CDATA[<p>テスト投稿を兼ねてこの記事を書いている時の操作について書いておきます。</p>
 <ol style="list-style-type: decimal">
 <li>Hakyllに<code>watch</code>引数を与えて起動する。</li>
@@ -231,7 +298,7 @@ runsandbox site.hs clean  1.59s user 0.27s system 98% cpu 1.894 tota</code></pre
 
 </div>]]></description>
     <pubDate>Tue, 25 Feb 2014 23:50:52 UT</pubDate>
-    <guid>http://philopon.github.io/posts/2014/create_blog.html</guid>
+    <guid>http://philopon.github.io/posts/2014/02/create_blog.html</guid>
 </item>
 
     </channel> 
