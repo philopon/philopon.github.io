@@ -1,5 +1,5 @@
 ---
-title: Haskyllで引用機能を使う
+title: Hakyllで引用機能を使う
 date:  2014-03-04T01:33:19Z
 tags:  hakyll, bibtex, haskell, pandoc
 ---
