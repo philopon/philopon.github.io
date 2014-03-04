@@ -10,7 +10,7 @@
     </author>
     <updated>2014-03-04T01:33:19Z</updated>
     <entry>
-    <title>Haskyllで引用機能を使う</title>
+    <title>Hakyllで引用機能を使う</title>
     <link href="http://philopon.github.io/posts/2014/03/hakyll_cite.html" />
     <id>http://philopon.github.io/posts/2014/03/hakyll_cite.html</id>
     <published>2014-03-04T01:33:19Z</published>
@@ -106,7 +106,7 @@
 <p>ライセンスつくったので直ぐにもう一通メール送るよ</p>
 <p>てな感じで2往復、6時間くらいでライセンスを発行してもらえました。</p>
 <p>で、</p>
-<pre class="sh"><code>$$ brew cask install onepassword</code></pre>
+<pre class="sh"><code>$ brew cask install onepassword</code></pre>
 <div class="figure">
 <a href="register.png"><img src="register.png" alt="登録完了"></a></img><p class="caption">登録完了</p>
 </div>

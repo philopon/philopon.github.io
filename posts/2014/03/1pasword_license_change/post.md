@@ -42,7 +42,7 @@ homebrew-cask、とても便利ですね！
 で、
 
 ```{.sh}
-$$ brew cask install onepassword
+$ brew cask install onepassword
 ```
 
 ![登録完了](register.png)
