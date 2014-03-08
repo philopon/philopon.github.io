@@ -121,7 +121,7 @@
 </item>
 <item>
     <title>zshでcabal-sandboxの状態を表示する</title>
-    <link>http://philopon.github.io/posts/2014/cabal-sandbox-zsh.html</link>
+    <link>http://philopon.github.io/posts/2014/03/cabal-sandbox-zsh.html</link>
     <description><![CDATA[<p>表題の通りです。 sandbox中のパッケージ数を表示させてます。</p>
 <div class="figure">
 <a href="ss.png"><img src="ss.png" alt="cabal-sandboxのパッケージ数を表示"></a></img><p class="caption">cabal-sandboxのパッケージ数を表示</p>
@@ -141,7 +141,7 @@
 
 </div>]]></description>
     <pubDate>Sun, 02 Mar 2014 13:39:08 UT</pubDate>
-    <guid>http://philopon.github.io/posts/2014/cabal-sandbox-zsh.html</guid>
+    <guid>http://philopon.github.io/posts/2014/03/cabal-sandbox-zsh.html</guid>
 </item>
 <item>
     <title>Hakyll tips</title>

@@ -125,8 +125,8 @@
 </entry>
 <entry>
     <title>zshでcabal-sandboxの状態を表示する</title>
-    <link href="http://philopon.github.io/posts/2014/cabal-sandbox-zsh.html" />
-    <id>http://philopon.github.io/posts/2014/cabal-sandbox-zsh.html</id>
+    <link href="http://philopon.github.io/posts/2014/03/cabal-sandbox-zsh.html" />
+    <id>http://philopon.github.io/posts/2014/03/cabal-sandbox-zsh.html</id>
     <published>2014-03-02T13:39:08Z</published>
     <updated>2014-03-02T13:39:08Z</updated>
     <summary type="html"><![CDATA[<p>表題の通りです。 sandbox中のパッケージ数を表示させてます。</p>
