@@ -48,7 +48,7 @@ feedConfig = FeedConfiguration
     }
 
 postRoute :: Identifier -> FilePath
-postRoute = ((<.> "html"). takeDirectory . toFilePath)
+postRoute = (<.> "html"). takeDirectory . toFilePath
 
 citationStyle :: Identifier
 citationStyle = "citation-styles/nature.csl"
@@ -60,7 +60,7 @@ main :: IO ()
 main = hakyll $ do
     match "static/**" $ do
         route . customRoute $ joinPath . tail . splitDirectories . toFilePath
-        compile $ copyFileCompiler
+        compile copyFileCompiler
 
     match ("images/*" .||. "fonts/*" .||. "css/*.min.css") $ do
         route   idRoute
@@ -203,21 +203,21 @@ main = hakyll $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAllSnapshots (postsPattern .&&. hasNoVersion) "raw_post" :: Compiler [Item String]
-            let template = readTemplate $ "<url><loc>" ++ rootAddress ++ "$url$</loc></url>"
-            fmap (Item "sitemap.xml") (applyJoinTemplateList "\n" template defaultContext posts)
+            let template = readTemplate $ "<url>\n  <loc>" ++ rootAddress ++ "$url$</loc>\n  <lastmod>$modified$</lastmod>\n</url>"
+            fmap (Item "sitemap.xml") (applyJoinTemplateList "\n" template (modificationTimeField "modified" "%FT%X+09:00" <> defaultContext) posts)
                 >>= loadAndApplyTemplate "templates/sitemap.xml" defaultContext
 
     create ["atom.xml"] $ do
         route idRoute
         compile $ do
-            let feedCxt = bodyField "description" <> (postCxt [])
+            let feedCxt = bodyField "description" <> postCxt []
             posts <- recentFirst =<< loadAllSnapshots (postsPattern .&&. hasNoVersion) "raw_post"
             renderAtom feedConfig feedCxt posts
     
     create ["rss.xml"] $ do
         route idRoute
         compile $ do
-            let feedCxt = bodyField "description" <> (postCxt [])
+            let feedCxt = bodyField "description" <> postCxt []
             posts <- recentFirst =<< loadAllSnapshots (postsPattern .&&. hasNoVersion) "raw_post"
             renderRss feedConfig feedCxt posts
 
@@ -311,7 +311,7 @@ postCompiler = cached "site.postCompiler" $ do
 dropAfterMore :: Item String -> Compiler (Item String)
 dropAfterMore item = do
     StringField url <- unContext (urlField "url") "url" item
-    return $ renderTags'. (process url). TS.parseTags <$> item
+    return $ renderTags'. process url . TS.parseTags <$> item
   where
     process _   []                                      = []
     process url (TS.TagComment c:_) | strip c == "more" = [ TS.TagOpen "a" [("href", url), ("class", "readmore")]
