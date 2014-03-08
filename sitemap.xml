@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>http://philopon.github.io/posts/2014/03/hakyll_cite.html</loc></url>
-<url><loc>http://philopon.github.io/posts/2014/03/1pasword_license_change.html</loc></url>
-<url><loc>http://philopon.github.io/posts/2014/cabal-sandbox-zsh.html</loc></url>
-<url><loc>http://philopon.github.io/posts/2014/hakyll_tips.html</loc></url>
-<url><loc>http://philopon.github.io/posts/2014/02/runsandbox.html</loc></url>
-<url><loc>http://philopon.github.io/posts/2014/02/create_blog.html</loc></url>
+<url>
+  <loc>http://philopon.github.io/posts/2014/03/hakyll_cite.html</loc>
+  <lastmod>2014-03-04T18:22:05Z+09:00</lastmod>
+</url>
+<url>
+  <loc>http://philopon.github.io/posts/2014/03/1pasword_license_change.html</loc>
+  <lastmod>2014-03-03T19:08:44Z+09:00</lastmod>
+</url>
+<url>
+  <loc>http://philopon.github.io/posts/2014/cabal-sandbox-zsh.html</loc>
+  <lastmod>2014-03-03T08:56:17Z+09:00</lastmod>
+</url>
+<url>
+  <loc>http://philopon.github.io/posts/2014/hakyll_tips.html</loc>
+  <lastmod>2014-03-03T18:59:20Z+09:00</lastmod>
+</url>
+<url>
+  <loc>http://philopon.github.io/posts/2014/02/runsandbox.html</loc>
+  <lastmod>2014-03-02T05:28:25Z+09:00</lastmod>
+</url>
+<url>
+  <loc>http://philopon.github.io/posts/2014/02/create_blog.html</loc>
+  <lastmod>2014-02-25T15:21:01Z+09:00</lastmod>
+</url>
 </urlset> 
