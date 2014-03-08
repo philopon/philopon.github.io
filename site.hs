@@ -58,6 +58,10 @@ minifyJs = processCompiler "./node_modules/uglify-js/bin/uglifyjs" ["--unsafe", 
 
 main :: IO ()
 main = hakyll $ do
+    match "static/**" $ do
+        route . customRoute $ joinPath . tail . splitDirectories . toFilePath
+        compile $ copyFileCompiler
+
     match ("images/*" .||. "fonts/*" .||. "css/*.min.css") $ do
         route   idRoute
         compile copyFileCompiler
@@ -309,7 +313,7 @@ dropAfterMore item = do
     StringField url <- unContext (urlField "url") "url" item
     return $ renderTags'. (process url). TS.parseTags <$> item
   where
-    process url []                                      = []
+    process _   []                                      = []
     process url (TS.TagComment c:_) | strip c == "more" = [ TS.TagOpen "a" [("href", url), ("class", "readmore")]
                                                           , TS.TagText "read more"
                                                           , TS.TagClose "a"]
