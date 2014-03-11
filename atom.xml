@@ -8,8 +8,45 @@
         <name>philopon</name>
         <email></email>
     </author>
-    <updated>2014-03-04T01:33:19Z</updated>
+    <updated>2014-03-12T00:22:03Z</updated>
     <entry>
+    <title>LlamaでNFCタグが使えないときの対処法</title>
+    <link href="http://philopon.github.io/posts/2014/03/llama_nfctag.html" />
+    <id>http://philopon.github.io/posts/2014/03/llama_nfctag.html</id>
+    <published>2014-03-12T00:22:03Z</published>
+    <updated>2014-03-12T00:22:03Z</updated>
+    <summary type="html"><![CDATA[<p>Llama便利ですね！ もっと便利に使うためにNFCタグを買ってみたものの、初期化出来なくて約2,000円が無駄になったとさめざめと泣いていましたが、なんとか解決出来たので記しておきます。</p>
+<div class="figure">
+<a href="cant_format.png"><img src="cant_format.png" alt="初期化画面"></a></img><p class="caption">初期化画面</p>
+</div>
+<!-- more -->
+
+<p>と言っても、任意のNFCタグライターでURLとして<code>llamaloc://llama.location.profiles/nfc</code>を書き込むだけです。</p>
+<div class="figure">
+<a href="writing.png"><img src="writing.png" alt="書き込み"></a></img><p class="caption">書き込み</p>
+</div>
+<p>その後同様に以下の画面を表示させてNFCタグをタッチすると、</p>
+<div class="figure">
+<a href="please_touch.png"><img src="please_touch.png" alt="タッチ待ち"></a></img><p class="caption">タッチ待ち</p>
+</div>
+<p>おめでとうございます！タグを見つけられたようです！</p>
+<div class="figure">
+<a href="naming.png"><img src="naming.png" alt="タグの命名"></a></img><p class="caption">タグの命名</p>
+</div>
+<p>これを“テストタグ”と命名し、トーストメッセージを出す条件を入れてみます。</p>
+<div class="figure">
+<a href="test_condition.png"><img src="test_condition.png" alt="テスト"></a></img><p class="caption">テスト</p>
+</div>
+<p>無事、トーストメッセージが表示されました！</p>
+<div class="figure">
+<a href="OK.png"><img src="OK.png" alt="OK"></a></img><p class="caption">OK</p>
+</div>
+<p>以上です。</p>
+<div class="references">
+
+</div>]]></summary>
+</entry>
+<entry>
     <title>Hakyllで引用機能を使う</title>
     <link href="http://philopon.github.io/posts/2014/03/hakyll_cite.html" />
     <id>http://philopon.github.io/posts/2014/03/hakyll_cite.html</id>
